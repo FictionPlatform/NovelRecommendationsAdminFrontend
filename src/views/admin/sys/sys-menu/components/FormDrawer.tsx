@@ -194,7 +194,7 @@ const FormDrawer = forwardRef<FormDrawerRef, DrawerProps>(({ onConfirm }, ref) =
         reset();
         setIsDrawerOpen(false);
       }}
-      destroyOnClose
+      destroyOnHidden
       extra={[
         <Space key="space">
           <LoadingButton

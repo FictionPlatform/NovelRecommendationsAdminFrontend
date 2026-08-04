@@ -75,7 +75,7 @@ const CategorySelectModal = forwardRef<CategorySelectModalRef, ModalProps>(({ on
       title="内容分类选择"
       open={isModalOpen}
       onCancel={() => setIsModalOpen(false)}
-      destroyOnClose
+      destroyOnHidden
       footer={[
         <LoadingButton
           key="cancel"

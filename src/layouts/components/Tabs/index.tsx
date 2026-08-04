@@ -63,6 +63,20 @@ const LayoutTabs = (props: any) => {
 		setTabsList(tabsList.filter((item: Menu.MenuOptions) => item.path !== tabPath));
 	};
 
+	const tabPaneItems = tabsList.map((item: Menu.MenuOptions) => ({
+		key: item.path,
+		label: (
+			<span>
+				{item.path == HOME_URL ? <HomeFilled /> : null}
+				{item.title}
+			</span>
+		),
+		closable: item.path !== HOME_URL,
+		// 如果你在原来的 <TabPane> 标签内部写了其他子组件，
+		// 请将它们赋值给 children 属性，例如：
+		// children: <YourComponent />,
+	}));
+
 	return (
 		<>
 			{themeConfig.tabs && (
@@ -76,21 +90,8 @@ const LayoutTabs = (props: any) => {
 						onEdit={path => {
 							delTabs(path as string);
 						}}
+						items={tabPaneItems}
 					>
-						{tabsList.map((item: Menu.MenuOptions) => {
-							return (
-								<TabPane
-									key={item.path}
-									tab={
-										<span>
-											{item.path == HOME_URL ? <HomeFilled /> : ""}
-											{item.title}
-										</span>
-									}
-									closable={item.path !== HOME_URL}
-								></TabPane>
-							);
-						})}
 					</Tabs>
 					<MoreButton tabsList={tabsList} delTabs={delTabs} setTabsList={setTabsList}></MoreButton>
 				</div>

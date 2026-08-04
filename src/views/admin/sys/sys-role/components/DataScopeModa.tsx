@@ -125,7 +125,7 @@ const DataScopeFormModal = forwardRef<DataScopeFormModalRef, ModalProps>(({ onCo
         reset();
         setIsModalOpen(false);
       }}
-      destroyOnClose
+      destroyOnHidden
       footer={[
         <LoadingButton
           key="cancel"

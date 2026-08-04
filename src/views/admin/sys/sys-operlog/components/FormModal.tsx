@@ -50,7 +50,7 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({}, ref) => {
         reset();
         setIsModalOpen(false);
       }}
-      destroyOnClose
+      destroyOnHidden
       footer={[
         <LoadingButton
           key="confirm"

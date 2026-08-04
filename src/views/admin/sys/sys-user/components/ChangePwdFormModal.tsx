@@ -68,7 +68,7 @@ const ChangePwdFormModal = forwardRef<ChangePwdFormModalRef, ModalProps>(({ onCo
         reset();
         setIsModalOpen(false);
       }}
-      destroyOnClose
+      destroyOnHidden
       footer={[
         <LoadingButton
           key="cancel"

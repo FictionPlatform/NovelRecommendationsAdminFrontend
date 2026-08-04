@@ -18,29 +18,25 @@ const MoreButton = (props: any) => {
 		tabPath ?? navigate(HOME_URL);
 	};
 
-	const menu = (
-		<Menu
-			items={[
-				{
-					key: "1",
-					label: <span>{t("tabs.closeCurrent")}</span>,
-					onClick: () => props.delTabs(pathname)
-				},
-				{
-					key: "2",
-					label: <span>{t("tabs.closeOther")}</span>,
-					onClick: () => closeMultipleTab(pathname)
-				},
-				{
-					key: "3",
-					label: <span>{t("tabs.closeAll")}</span>,
-					onClick: () => closeMultipleTab()
-				}
-			]}
-		/>
-	);
+	const menuItems = [
+		{
+			key: "1",
+			label: <span>{t("tabs.closeCurrent")}</span>,
+			onClick: () => props.delTabs(pathname)
+		},
+		{
+			key: "2",
+			label: <span>{t("tabs.closeOther")}</span>,
+			onClick: () => closeMultipleTab(pathname)
+		},
+		{
+			key: "3",
+			label: <span>{t("tabs.closeAll")}</span>,
+			onClick: () => closeMultipleTab()
+		}
+	];
 	return (
-		<Dropdown overlay={menu} placement="bottom" arrow={{ pointAtCenter: true }} trigger={["click"]}>
+		<Dropdown menu={{ items: menuItems}} placement="bottom" arrow={{ pointAtCenter: true }} trigger={["click"]}>
 			<Button className="more-button" type="primary" size="small">
 				{t("tabs.more")} <DownOutlined />
 			</Button>

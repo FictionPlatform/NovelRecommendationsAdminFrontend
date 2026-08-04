@@ -96,7 +96,7 @@ const UserLevelSelectModal = forwardRef<UserLevelSelectModalRef, ModalProps>(({ 
       title="等级选择"
       open={isModalOpen}
       onCancel={() => setIsModalOpen(false)}
-      destroyOnClose
+      destroyOnHidden
       footer={[
         <LoadingButton
           key="cancel"

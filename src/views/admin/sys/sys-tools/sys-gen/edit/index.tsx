@@ -138,7 +138,7 @@ const GenTable: React.FC = () => {
             });
             return options;
           })()}
-          dropdownStyle={{ width: 500 }} // 设置下拉框宽度
+          // dropdownStyle={{ width: 500 }} // 设置下拉框宽度
           onSearch={handleSearch}
           style={{ width: "100%" }}
           defaultValue={text}

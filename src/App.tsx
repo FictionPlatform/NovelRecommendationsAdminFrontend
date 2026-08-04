@@ -9,7 +9,7 @@ import i18n from "i18next";
 import { useEffect, useState } from "react";
 import { AliveScope } from "react-activation";
 import { connect } from "react-redux";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 const App = (props: any) => {
 	const { language, assemblySize, setLanguage } = props;
@@ -44,11 +44,11 @@ const App = (props: any) => {
 		>
 			<AppLayout style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
 				<AliveScope>
-					<HashRouter>
+					<BrowserRouter>
 						<AuthRouter>
 							<Router />
 						</AuthRouter>
-					</HashRouter>
+					</BrowserRouter>
 				</AliveScope>
 			</AppLayout>
 		</ConfigProvider>

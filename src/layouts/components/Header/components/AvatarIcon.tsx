@@ -42,32 +42,29 @@ const AvatarIcon = (props: any) => {
 	};
 
 	// Dropdown Menu
-	const menu = (
-		<Menu
-			items={[
-				{
-					key: "1",
-					label: <span className="dropdown-item">个人信息</span>,
-					icon: <UserOutlined />,
-					//onClick: () => infoRef.current?.showModal({ name: "hooks" })
-					onClick: () => {
-						navigate(PROFILE_URL);
-					}
-				},
-				{
-					type: "divider"
-				},
-				{
-					key: "2",
-					label: <span className="dropdown-item">退出登录</span>,
-					onClick: logout
-				}
-			]}
-		></Menu>
-	);
+	// 直接定义 items 数组
+	const menuItems = [
+		{
+			key: "1",
+			label: <span className="dropdown-item">个人信息</span>,
+			icon: <UserOutlined />,
+			onClick: () => {
+				navigate(PROFILE_URL);
+			}
+		},
+		{
+			type: "divider" as const
+		},
+		{
+			key: "2",
+			label: <span className="dropdown-item">退出登录</span>,
+			onClick: logout
+		}
+	];
+
 	return (
 		<>
-			<Dropdown overlay={menu} placement="bottom" arrow trigger={["click"]}>
+			<Dropdown menu={{ items: menuItems }} placement="bottom" arrow trigger={["click"]}>
 				<Avatar size="large" src={uInfo?.avatar} />
 			</Dropdown>
 			<InfoModal innerRef={infoRef}></InfoModal>

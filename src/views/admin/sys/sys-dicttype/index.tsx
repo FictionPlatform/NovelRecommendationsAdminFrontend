@@ -75,9 +75,11 @@ const DictType: React.FC = () => {
       width: 220,
       render: text => (
         <Tooltip title="点击查看详情">
-          <Button type="link" style={{ padding: 0 }}>
-            {text}
-          </Button>
+          <span>
+            <Button type="link" style={{ padding: 0 }}>
+              {text}
+            </Button>
+          </span>
         </Tooltip>
       ),
       onCell: data => ({
@@ -233,7 +235,7 @@ const DictType: React.FC = () => {
         }}
         options={{
           reload: true,
-          density: true,
+          density: false,
           fullScreen: true
         }}
         rowKey="id"

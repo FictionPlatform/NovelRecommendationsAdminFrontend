@@ -151,125 +151,136 @@ const Profile: React.FC = () => {
         {/* 右侧编辑表单 */}
         <Col span={16}>
           <Card>
-            <Tabs defaultActiveKey="1">
-              <Tabs.TabPane tab="基本资料" key="1">
-                <Form
-                  form={userInfoform}
-                  layout="vertical"
-                  initialValues={{
-                    username: userInfo.username,
-                    phone: userInfo.phone,
-                    email: userInfo.email,
-                    sex: userInfo.sex
-                  }}
-                >
-                  {/* 用户名 */}
-                  <Form.Item label="用户名" name="username" rules={[{ required: true, message: "请输入用户名！" }]}>
-                    <Input />
-                  </Form.Item>
+            <Tabs
+              defaultActiveKey="1"
+              items={[
+                {
+                  key: "1",
+                  label: "基本资料",
+                  children: (
+                    <Form
+                      form={userInfoform}
+                      layout="vertical"
+                      initialValues={{
+                        username: userInfo.username,
+                        phone: userInfo.phone,
+                        email: userInfo.email,
+                        sex: userInfo.sex
+                      }}
+                    >
+                      {/* 用户名 */}
+                      <Form.Item label="用户名" name="username" rules={[{ required: true, message: "请输入用户名！" }]}>
+                        <Input />
+                      </Form.Item>
 
-                  {/* 手机号 */}
-                  <Form.Item
-                    label="手机号"
-                    name="phone"
-                    rules={[
-                      { required: true, message: "请输入手机号！" },
-                      { pattern: /^1[3-9]\d{9}$/, message: "请输入有效的手机号！" }
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-
-                  {/* 邮箱 */}
-                  <Form.Item
-                    label="邮箱"
-                    name="email"
-                    rules={[
-                      { required: true, message: "请输入邮箱！" },
-                      { type: "email", message: "请输入有效的邮箱地址！" }
-                    ]}
-                  >
-                    <Input />
-                  </Form.Item>
-
-                  {/* 性别 */}
-                  <Form.Item label="性别" name="sex">
-                    <Radio.Group>
-                      <Radio value="1">男</Radio>
-                      <Radio value="2">女</Radio>
-                    </Radio.Group>
-                  </Form.Item>
-
-                  {/* 按钮组 */}
-                  <Form.Item>
-                    <div className="profile-submit">
-                      <LoadingButton type="primary" htmlType="submit" onClick={done => onUpdateUserInfo(done)}>
-                        保存
-                      </LoadingButton>
-                      <LoadingButton
-                        htmlType="button"
-                        onClick={done => {
-                          removeTab({ path, isCurrent: true });
-                          done();
-                        }}
+                      {/* 手机号 */}
+                      <Form.Item
+                        label="手机号"
+                        name="phone"
+                        rules={[
+                          { required: true, message: "请输入手机号！" },
+                          { pattern: /^1[3-9]\d{9}$/, message: "请输入有效的手机号！" }
+                        ]}
                       >
-                        关闭
-                      </LoadingButton>
-                    </div>
-                  </Form.Item>
-                </Form>
-              </Tabs.TabPane>
-              <Tabs.TabPane tab="修改密码" key="2">
-                <Form form={passwordForm} layout="vertical">
-                  {/* Old Password */}
-                  <Form.Item label="原密码" name="oldPassword" rules={[{ required: true, message: "请输入原密码！" }]}>
-                    <Input.Password />
-                  </Form.Item>
+                        <Input />
+                      </Form.Item>
 
-                  {/* New Password */}
-                  <Form.Item label="新密码" name="newPassword" rules={[{ required: true, message: "请输入新密码！" }]}>
-                    <Input.Password />
-                  </Form.Item>
-
-                  {/* Confirm New Password */}
-                  <Form.Item
-                    label="确认新密码"
-                    name="confirmPassword"
-                    rules={[
-                      { required: true, message: "请确认新密码！" },
-                      ({ getFieldValue }) => ({
-                        validator(_, value) {
-                          if (!value || getFieldValue("newPassword") === value) {
-                            return Promise.resolve();
-                          }
-                          return Promise.reject(new Error("新密码和确认密码不匹配！"));
-                        }
-                      })
-                    ]}
-                  >
-                    <Input.Password />
-                  </Form.Item>
-
-                  {/* Submit buttons */}
-                  <Form.Item>
-                    <div className="profile-submit">
-                      <LoadingButton type="primary" htmlType="submit" onClick={done => onPasswordChange(done)}>
-                        修改密码
-                      </LoadingButton>
-                      <LoadingButton
-                        htmlType="button"
-                        onClick={done => {
-                          removeTab({ path, isCurrent: true });
-                          done();
-                        }}
+                      {/* 邮箱 */}
+                      <Form.Item
+                        label="邮箱"
+                        name="email"
+                        rules={[
+                          { required: true, message: "请输入邮箱！" },
+                          { type: "email", message: "请输入有效的邮箱地址！" }
+                        ]}
                       >
-                        关闭
-                      </LoadingButton>
-                    </div>
-                  </Form.Item>
-                </Form>
-              </Tabs.TabPane>
-            </Tabs>
+                        <Input />
+                      </Form.Item>
+
+                      {/* 性别 */}
+                      <Form.Item label="性别" name="sex">
+                        <Radio.Group>
+                          <Radio value="1">男</Radio>
+                          <Radio value="2">女</Radio>
+                        </Radio.Group>
+                      </Form.Item>
+
+                      {/* 按钮组 */}
+                      <Form.Item>
+                        <div className="profile-submit">
+                          <LoadingButton type="primary" htmlType="submit" onClick={done => onUpdateUserInfo(done)}>
+                            保存
+                          </LoadingButton>
+                          <LoadingButton
+                            htmlType="button"
+                            onClick={done => {
+                              removeTab({ path, isCurrent: true });
+                              done();
+                            }}
+                          >
+                            关闭
+                          </LoadingButton>
+                        </div>
+                      </Form.Item>
+                    </Form>
+                  )
+                },
+                {
+                  key: "2",
+                  label: "修改密码",
+                  children: (
+                    <Form form={passwordForm} layout="vertical">
+                      {/* Old Password */}
+                      <Form.Item label="原密码" name="oldPassword" rules={[{ required: true, message: "请输入原密码！" }]}>
+                        <Input.Password />
+                      </Form.Item>
+
+                      {/* New Password */}
+                      <Form.Item label="新密码" name="newPassword" rules={[{ required: true, message: "请输入新密码！" }]}>
+                        <Input.Password />
+                      </Form.Item>
+
+                      {/* Confirm New Password */}
+                      <Form.Item
+                        label="确认新密码"
+                        name="confirmPassword"
+                        rules={[
+                          { required: true, message: "请确认新密码！" },
+                          ({ getFieldValue }) => ({
+                            validator(_, value) {
+                              if (!value || getFieldValue("newPassword") === value) {
+                                return Promise.resolve();
+                              }
+                              return Promise.reject(new Error("新密码和确认密码不匹配！"));
+                            }
+                          })
+                        ]}
+                      >
+                        <Input.Password />
+                      </Form.Item>
+
+                      {/* Submit buttons */}
+                      <Form.Item>
+                        <div className="profile-submit">
+                          <LoadingButton type="primary" htmlType="submit" onClick={done => onPasswordChange(done)}>
+                            修改密码
+                          </LoadingButton>
+                          <LoadingButton
+                            htmlType="button"
+                            onClick={done => {
+                              removeTab({ path, isCurrent: true });
+                              done();
+                            }}
+                          >
+                            关闭
+                          </LoadingButton>
+                        </div>
+                      </Form.Item>
+                    </Form>
+                  )
+                }
+              ]}
+            />
           </Card>
         </Col>
       </Row>

@@ -55,7 +55,7 @@ const PreviewCodeModal = forwardRef<PreviewCodeModalRef, ModalProps>(({ onConfir
         getContainer={false}
         open={isModalVisible}
         onCancel={() => reset()}
-        destroyOnClose
+        destroyOnHidden
         width="90vw"
         styles={{
           body: {

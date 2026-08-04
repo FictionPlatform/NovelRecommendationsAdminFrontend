@@ -349,7 +349,7 @@ const User: React.FC = () => {
               }}
               options={{
                 reload: true,
-                density: true,
+                density: false,
                 fullScreen: true
               }}
               rowKey="id"

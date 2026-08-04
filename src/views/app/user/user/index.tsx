@@ -271,7 +271,7 @@ const User: React.FC = () => {
         }}
         options={{
           reload: true,
-          density: true,
+          density: false,
           fullScreen: true
         }}
         rowKey="id"
@@ -281,7 +281,7 @@ const User: React.FC = () => {
         headerTitle="用户管理"
         toolBarRender={toolBarRender}
         footer={() => extend && <Statistic title="余额 总计" value={extend.money} valueStyle={{ color: SummaryColor.base }} />}
-      />
+      ></ProTable>
       <FormModal ref={formModalRef} onConfirm={handleFormModalConfirm} />
     </>
   );

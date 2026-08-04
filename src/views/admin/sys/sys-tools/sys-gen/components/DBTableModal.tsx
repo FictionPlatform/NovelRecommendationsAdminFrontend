@@ -75,7 +75,7 @@ const DBTableModal = forwardRef<DBTableModalRef, ModalProps>(({ onConfirm }, ref
       title="导入表"
       open={isModalOpen}
       onCancel={() => setIsModalOpen(false)}
-      destroyOnClose
+      destroyOnHidden
       footer={[
         <LoadingButton
           key="cancel"

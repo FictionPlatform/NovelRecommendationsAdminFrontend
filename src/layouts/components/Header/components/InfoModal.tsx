@@ -25,7 +25,7 @@ const InfoModal = (props: Props) => {
 		setModalVisible(false);
 	};
 	return (
-		<Modal title="个人信息" visible={modalVisible} onOk={handleOk} onCancel={handleCancel} destroyOnClose={true}>
+		<Modal title="个人信息" open={modalVisible} onOk={handleOk} onCancel={handleCancel} destroyOnHidden={true}>
 			<p>User Info...</p>
 			<p>User Info...</p>
 			<p>User Info...</p>
