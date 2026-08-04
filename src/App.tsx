@@ -6,7 +6,6 @@ import { App as AppLayout, ConfigProvider } from "antd";
 import enUS from "antd/lib/locale/en_US";
 import zhCN from "antd/lib/locale/zh_CN";
 import i18n from "i18next";
-import "moment/dist/locale/zh-cn";
 import { useEffect, useState } from "react";
 import { AliveScope } from "react-activation";
 import { connect } from "react-redux";

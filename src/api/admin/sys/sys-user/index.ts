@@ -89,6 +89,11 @@ export const logoutApi = () => {
 };
 
 // get user info
+export const getUserProfileLoginApi = (config = {}) => {
+  return request.get<LoginUserInfo>(`/admin-api/v1/admin/sys/sys-user/profile`, {}, config);
+};
+
+// get user info
 export const getUserProfileApi = () => {
   return request.get<LoginUserInfo>(`/admin-api/v1/admin/sys/sys-user/profile`);
 };

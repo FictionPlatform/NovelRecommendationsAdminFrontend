@@ -15,9 +15,12 @@ export class AxiosCanceler {
 	 * @param {Object} config
 	 */
 	addPending(config: AxiosRequestConfig) {
+		const url = getPendingUrl(config);
+		// * 用请求拦截器阶段（data 尚未被 transformRequest 序列化）算出的 key 缓存到 config，
+		// * 响应/失败拦截器沿用同一个 key 移除，避免 POST 请求 data 被序列化后 key 不一致导致条目泄漏
+		(config as Record<string, unknown>).pendingUrl = url;
 		// * 在请求开始前，对之前的请求做检查取消操作
 		this.removePending(config);
-		const url = getPendingUrl(config);
 		config.cancelToken =
 			config.cancelToken ||
 			new axios.CancelToken(cancel => {
@@ -33,7 +36,7 @@ export class AxiosCanceler {
 	 * @param {Object} config
 	 */
 	removePending(config: AxiosRequestConfig) {
-		const url = getPendingUrl(config);
+		const url = ((config as Record<string, unknown>).pendingUrl as string) || getPendingUrl(config);
 
 		if (pendingMap.has(url)) {
 			// 如果在 pending 中存在当前请求标识，需要取消当前请求，并且移除

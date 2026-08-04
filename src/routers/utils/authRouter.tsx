@@ -1,7 +1,7 @@
 import { HOME_URL, LOGIN_URL } from "@/config";
 import { store } from "@/redux/index";
 import { AxiosCanceler } from "@/utils/request/helper/axiosCancel";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const axiosCanceler = new AxiosCanceler();
@@ -19,16 +19,21 @@ const AuthRouter = (props: { children: JSX.Element }) => {
 	// 当前账号允许访问的路由扁平数组（由菜单列表计算得出，含隐藏页）
 	const authRouter: string[] = store.getState().auth.authRouter;
 
+	// 仅在 pathname 真正变化时取消历史 pending 请求。
+	// 不能用 [token] 触发：登录流程中 setToken 会重渲染本组件，
+	// 若此时 removeAllPending，会中断 loginApi 之后在途的 profile/menu-role 请求
+	const prevPathname = useRef(pathname);
 	useEffect(() => {
+		if (prevPathname.current === pathname) return;
+		prevPathname.current = pathname;
 		axiosCanceler.removeAllPending();
+	}, [pathname]);
+
+	useEffect(() => {
 		const update = async () => {
 			if (!token) {
 				return navigate(LOGIN_URL);
 			}
-			if (token && pathname === LOGIN_URL) {
-				return navigate(HOME_URL);
-			}
-
 			if (!token && pathname !== LOGIN_URL) {
 				return navigate(LOGIN_URL, { replace: true });
 			}

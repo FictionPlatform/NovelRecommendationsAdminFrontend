@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const LoginForm = (props: any) => {
 	const { t } = useTranslation();
@@ -67,9 +68,24 @@ const LoginForm = (props: any) => {
 					message.destroy("loading");
 				}
 			})
-			.catch(() => {
+			.catch((error) => {
 				onCaptcha();
-				message.error("表单校验失败");
+				// 1. 判断是否是请求被取消的错误
+				if (axios.isCancel(error)) {
+					console.log('请求被取消:', error.message);
+					// 这里通常不需要提示用户，或者提示“登录已取消”
+					return;
+				}
+				// 2. 判断是否是表单校验错误
+				else if (error.errorFields) {
+					console.log('表单校验失败:', error);
+					message.error("表单校验失败");
+				}
+				// 3. 其他异常（如网络错误、代码报错）
+				else {
+					console.error('登录过程发生未知错误:', error);
+					message.error("登录失败，请重试");
+				}
 				done();
 			});
 	};

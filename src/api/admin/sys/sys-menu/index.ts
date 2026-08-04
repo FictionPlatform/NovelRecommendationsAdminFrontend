@@ -55,6 +55,10 @@ export interface MenuTreeRole {
   checkedKeys?: number[];
 }
 
+export const getMenuRoleLoginApi = (config = {}) => {
+  return request.get<MenuState["totalMenuList"]>(`/admin-api/v1/admin/sys/sys-menu/menu-role`, {}, config);
+};
+
 export const getMenuRoleApi = () => {
   return request.get<MenuState["totalMenuList"]>(`/admin-api/v1/admin/sys/sys-menu/menu-role`);
 };

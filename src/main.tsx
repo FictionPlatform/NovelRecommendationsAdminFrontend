@@ -15,11 +15,11 @@ import ReactDOM from "react-dom/client";
 // react 18 创建（会导致 antd 菜单折叠时闪烁，等待官方修复）
 ReactDOM.createRoot(document.getElementById("root")!).render(
 	// * react严格模式
-	<React.StrictMode>
+	// <React.StrictMode>
 		<Provider store={store}>
 			<PersistGate persistor={persistor}>
 				<App />
 			</PersistGate>
 		</Provider>
-	</React.StrictMode>
+	// </React.StrictMode>
 );

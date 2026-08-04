@@ -2,7 +2,7 @@ import { Spin } from "antd";
 import "./index.less";
 
 const Loading = ({ tip = "Loading" }: { tip?: string }) => {
-	return <Spin tip={tip} size="large" className="request-loading" />;
+	return <Spin spinning tip={tip} size="large" fullscreen className="request-loading" />;
 };
 
 export default Loading;
