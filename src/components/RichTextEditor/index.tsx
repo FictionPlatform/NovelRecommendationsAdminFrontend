@@ -1,91 +1,70 @@
-import type { IDomEditor } from "@wangeditor/editor"; // 导入类型
-import { Editor, Toolbar } from "@wangeditor/editor-for-react";
-import "@wangeditor/editor/dist/css/style.css"; // 引入样式
-import React, { useEffect, useState } from "react";
-import LoadingButton from "../LoadingButton";
-import "./index.less"; // 自定义样式
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Underline from "@tiptap/extension-underline";
+import { useEffect } from "react";
+import "./index.less";
 
 interface RichTextEditorProps {
-	value?: string; // 初始内容
-	onChange?: (html: string) => void; // 内容变化回调
-	placeholder?: string; // 占位提示
-	toolbarConfig?: Record<string, unknown>; // 工具栏配置
-	editorStyle?: React.CSSProperties; // 编辑器样式
+	value?: string;
+	onChange?: (value: string) => void;
+	minHeight?: number;
 }
 
-const RichTextEditor: React.FC<RichTextEditorProps> = ({
-	value = "",
-	onChange,
-	placeholder = "请输入内容...",
-	toolbarConfig = {},
-	editorStyle = {}
-}) => {
-	const [editor, setEditor] = useState<IDomEditor | null>(null); // 编辑器实例
-	const [html, setHtml] = useState<string>(value); // 当前内容
-	const [isToolbarVisible, setIsToolbarVisible] = useState(false); // 工具栏是否可见
-
-	// 在组件卸载时销毁编辑器
-	useEffect(() => {
-		return () => {
-			if (editor) {
-				editor.destroy();
-				setEditor(null); // 清除 editor 状态
-			}
-		};
-	}, []); // 空数组确保仅在组件卸载时触发清理
-
-	const handleEditorChange = (currentEditor: IDomEditor) => {
-		const content = currentEditor.getHtml(); // 获取HTML内容
-		setHtml(content); // 更新本地内容
-		if (onChange) {
-			onChange(content); // 调用外部回调
+const RichTextEditor = ({ value, onChange, minHeight = 300 }: RichTextEditorProps) => {
+	const editor = useEditor({
+		extensions: [StarterKit, Underline],
+		content: value || "",
+		onUpdate: ({ editor }) => {
+			onChange?.(editor.getHTML());
 		}
-	};
+	});
+
+	useEffect(() => {
+		if (!editor) return;
+		const current = editor.getHTML();
+		const next = value || "";
+		if (current !== next) {
+			editor.commands.setContent(next, { emitUpdate: false });
+		}
+	}, [editor, value]);
+
+	if (!editor) return null;
+
+	const buttons = [
+		{ key: "bold", label: "B", title: "加粗", active: editor.isActive("bold"), action: () => editor.chain().focus().toggleBold().run() },
+		{ key: "italic", label: "I", title: "斜体", active: editor.isActive("italic"), action: () => editor.chain().focus().toggleItalic().run() },
+		{ key: "underline", label: "U", title: "下划线", active: editor.isActive("underline"), action: () => editor.chain().focus().toggleUnderline().run() },
+		{ key: "strike", label: "S", title: "删除线", active: editor.isActive("strike"), action: () => editor.chain().focus().toggleStrike().run() },
+		{ key: "h1", label: "H1", title: "一级标题", active: editor.isActive("heading", { level: 1 }), action: () => editor.chain().focus().toggleHeading({ level: 1 }).run() },
+		{ key: "h2", label: "H2", title: "二级标题", active: editor.isActive("heading", { level: 2 }), action: () => editor.chain().focus().toggleHeading({ level: 2 }).run() },
+		{ key: "h3", label: "H3", title: "三级标题", active: editor.isActive("heading", { level: 3 }), action: () => editor.chain().focus().toggleHeading({ level: 3 }).run() },
+		{ key: "bulletList", label: "• 列表", title: "无序列表", active: editor.isActive("bulletList"), action: () => editor.chain().focus().toggleBulletList().run() },
+		{ key: "orderedList", label: "1. 列表", title: "有序列表", active: editor.isActive("orderedList"), action: () => editor.chain().focus().toggleOrderedList().run() },
+		{ key: "blockquote", label: "引用", title: "引用", active: editor.isActive("blockquote"), action: () => editor.chain().focus().toggleBlockquote().run() },
+		{ key: "codeBlock", label: "代码", title: "代码块", active: editor.isActive("codeBlock"), action: () => editor.chain().focus().toggleCodeBlock().run() },
+		{ key: "hr", label: "分隔线", title: "分隔线", active: false, action: () => editor.chain().focus().setHorizontalRule().run() },
+		{ key: "clear", label: "清除格式", title: "清除格式", active: false, action: () => editor.chain().focus().unsetAllMarks().clearNodes().run() },
+		{ key: "undo", label: "撤销", title: "撤销", active: false, action: () => editor.chain().focus().undo().run() },
+		{ key: "redo", label: "重做", title: "重做", active: false, action: () => editor.chain().focus().redo().run() }
+	];
 
 	return (
 		<div className="rich-text-editor">
-			{/* 折叠按钮 */}
-			<div className="rich-text-editor-toolbar-toggle">
-				<LoadingButton
-					type="text"
-					onClick={done => {
-						setIsToolbarVisible(prev => !prev);
-						setTimeout(() => done(), 500);
-					}}
-					style={{ fontSize: 14 }}
-				>
-					{isToolbarVisible ? "隐藏工具栏 ▲" : "显示工具栏 ▼"}
-				</LoadingButton>
+			<div className="rich-text-editor-toolbar">
+				{buttons.map(btn => (
+					<button
+						key={btn.key}
+						type="button"
+						title={btn.title}
+						className={["rich-text-editor-btn", btn.active ? "active" : ""].join(" ")}
+						onMouseDown={e => e.preventDefault()}
+						onClick={btn.action}
+					>
+						{btn.label}
+					</button>
+				))}
 			</div>
-			{/* 工具栏 */}
-			{isToolbarVisible && (
-				<div className="rich-text-editor-toolbar">
-					<Toolbar
-						editor={editor}
-						defaultConfig={{
-							excludeKeys: ["fullScreen"], // 默认移除全屏按钮
-							...toolbarConfig
-						}}
-					/>
-				</div>
-			)}
-			{/* 编辑器 */}
-			<div className="rich-text-editor-content">
-				<Editor
-					defaultConfig={{
-						placeholder,
-						onChange: handleEditorChange
-					}}
-					value={html}
-					onCreated={currentEditor => setEditor(currentEditor)} // 编辑器创建时保存实例
-					style={{
-						height: "325px", // 不得小于325px这高度，否则控制台会警告
-						border: "1px solid #ccc", // 边框，增强可见性
-						padding: "10px", // 增加内边距
-						...editorStyle
-					}}
-				/>
-			</div>
+			<EditorContent editor={editor} className="rich-text-editor-content" style={{ minHeight }} />
 		</div>
 	);
 };

@@ -14,7 +14,7 @@ const AuthButton: React.FC<AuthButtonProps> = ({ permission, children }) => {
 		const hasPermission = permission.every(item => uInfo.permissions?.includes(item));
 		hasPermission && (isAuth = true);
 	}
-	if (uInfo.permissions?.length == 1 && uInfo.permissions?.includes("*:*:*")) {
+	if (uInfo && uInfo.permissions?.length === 1 && uInfo.permissions?.includes("*:*:*")) {
 		isAuth = true;
 	}
 

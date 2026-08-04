@@ -174,8 +174,9 @@ const DataScopeFormModal = forwardRef<DataScopeFormModalRef, ModalProps>(({ onCo
                   defaultExpandAll
                   checkedKeys={deptSelect}
                   onCheck={(checked, halfChecked) => {
-                    const keys = Array.isArray(checked) ? checked : checked.checked;
-                    setDeptSelect(keys);
+                    const checkedKeys = Array.isArray(checked) ? checked : checked.checked;
+                    // 半选父节点一并提交，避免后端 Replace 关联时丢失父级授权
+                    setDeptSelect([...checkedKeys, ...(halfChecked.halfCheckedKeys || [])]);
                   }}
                   fieldNames={{ title: "deptName", key: "id", children: "children" }}
                   treeData={deptTreeRole.depts as any[]}

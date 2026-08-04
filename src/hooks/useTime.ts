@@ -14,7 +14,7 @@ export const useTimes = () => {
 		return () => {
 			clearInterval(timer.current);
 		};
-	}, [time]);
+	}, []);
 
 	return {
 		time

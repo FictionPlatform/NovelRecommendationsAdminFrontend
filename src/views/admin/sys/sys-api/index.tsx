@@ -322,7 +322,7 @@ const Api: React.FC = () => {
           return formatDataForProTable<ApiModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-api",
           persistenceType: "localStorage"
         }}
         options={{

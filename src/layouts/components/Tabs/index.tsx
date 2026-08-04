@@ -33,9 +33,16 @@ const LayoutTabs = (props: any) => {
 	// add tabs
 	const addTabs = () => {
 		const route = searchRoute(pathname, rList);
+		const path = route.path;
+		const title = route.title;
+		// 未知/错误页路由（login、403/404/500 等）不在菜单列表中，不插入标签页
+		if (!path || !title) {
+			setActiveValue(pathname);
+			return;
+		}
 		let newTabsList = JSON.parse(JSON.stringify(tabsList));
-		if (tabsList.every((item: any) => item.path !== route.path)) {
-			newTabsList.push({ title: route.title, path: route.path });
+		if (tabsList.every((item: any) => item.path !== path)) {
+			newTabsList.push({ title, path });
 		}
 		setTabsList(newTabsList);
 		setActiveValue(pathname);

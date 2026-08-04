@@ -228,7 +228,7 @@ const UserCountryCode: React.FC = () => {
           return formatDataForProTable<UserCountryCodeModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-user-country-code",
           persistenceType: "localStorage"
         }}
         options={{

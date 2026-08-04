@@ -223,7 +223,7 @@ const UserLevel: React.FC = () => {
           return formatDataForProTable<UserLevelModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-user-level",
           persistenceType: "localStorage"
         }}
         options={{

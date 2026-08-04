@@ -174,8 +174,9 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
                 checkable
                 checkedKeys={menuSelect}
                 onCheck={(checked, halfChecked) => {
-                  const keys = Array.isArray(checked) ? checked : checked.checked;
-                  setMenuSelect(keys);
+                  const checkedKeys = Array.isArray(checked) ? checked : checked.checked;
+                  // 半选父节点一并提交，避免后端 Replace 关联时丢失父级授权
+                  setMenuSelect([...checkedKeys, ...(halfChecked.halfCheckedKeys || [])]);
                 }}
                 defaultExpandedKeys={[0]}
                 fieldNames={{ title: "title", key: "id", children: "children" }}

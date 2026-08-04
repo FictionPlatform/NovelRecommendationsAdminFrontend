@@ -186,7 +186,7 @@ const UserOperLog: React.FC = () => {
         return formatDataForProTable<UserOperLogModel>(data);
       }}
       columnsState={{
-        persistenceKey: "use-pro-table-key",
+        persistenceKey: "use-pro-table-key-user-oper-log",
         persistenceType: "localStorage"
       }}
       options={{

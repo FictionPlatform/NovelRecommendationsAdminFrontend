@@ -287,7 +287,7 @@ const FilemgrApp: React.FC = () => {
           return formatDataForProTable<FilemgrAppModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-filemgr-app",
           persistenceType: "localStorage"
         }}
         options={{

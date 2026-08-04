@@ -201,7 +201,7 @@ const ContentCategory: React.FC = () => {
           return formatDataForProTable<ContentCategoryModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-content-category",
           persistenceType: "localStorage"
         }}
         options={{

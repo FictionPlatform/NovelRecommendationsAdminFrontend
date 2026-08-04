@@ -10,14 +10,16 @@ import type { ActionType, ProColumns } from "@ant-design/pro-components";
 import { ProTable } from "@ant-design/pro-components";
 import { Space } from "antd";
 import { useRef } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import FormModal, { FormModalRef } from "./components/FormModal";
 
 const DictData: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formModalRef = useRef<FormModalRef>(null);
   const location = useLocation();
-  const state = location.state;
+  const [searchParams] = useSearchParams();
+  // dictType 同时支持 query 参数（刷新可恢复）与路由态（旧入口兼容），避免 location.state 为 null 时空指针崩溃
+  const dictType: string = searchParams.get("dictType") || (location.state as { dictType?: string } | null)?.dictType || "";
 
   const handleShowAddFormModal = (dictType: string, done: () => void) => {
     formModalRef.current?.showAddFormModal(dictType);
@@ -164,7 +166,7 @@ const DictData: React.FC = () => {
         type="primary"
         key="addTable"
         icon={<PlusCircleOutlined />}
-        onClick={done => handleShowAddFormModal(state.dictType, done)}
+        onClick={done => handleShowAddFormModal(dictType, done)}
       >
         新增
       </LoadingButton>
@@ -182,11 +184,11 @@ const DictData: React.FC = () => {
         defaultSize="small"
         scroll={{ x: "2000", y: "100%" }}
         request={async params => {
-          const { data } = await getDictDataPageApi(params, state.dictType);
+          const { data } = await getDictDataPageApi(params, dictType);
           return formatDataForProTable<DictDataModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-dictdata",
           persistenceType: "localStorage"
         }}
         options={{

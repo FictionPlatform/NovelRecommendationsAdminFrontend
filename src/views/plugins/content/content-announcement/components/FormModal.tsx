@@ -131,8 +131,20 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
         <Form.Item name="title" label="标题" rules={[{ required: true, message: "请输入标题" }]}>
           <Input placeholder="请输入标题" />
         </Form.Item>
-        <Form.Item name="content" label="内容" rules={[{ required: true, message: "请输入内容" }]}>
-          <RichTextEditor placeholder="请输入内容" />
+        <Form.Item
+          name="content"
+          label="内容"
+          rules={[
+            { required: true, message: "请输入内容" },
+            {
+              validator: (_, value) =>
+                (value || "").replace(/<[^>]*>/g, "").trim()
+                  ? Promise.resolve()
+                  : Promise.reject(new Error("请输入内容"))
+            }
+          ]}
+        >
+          <RichTextEditor />
         </Form.Item>
         <Form.Item name="num" label="阅读次数" rules={[{ required: true, message: "请输入阅读次数" }]}>
           <InputNumber style={{ width: "100%" }} min={0} />

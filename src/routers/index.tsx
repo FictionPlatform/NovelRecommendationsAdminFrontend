@@ -33,6 +33,12 @@ export const rootRouter: RouteObjectType[] = [
 		path: "/500",
 		element: lazyLoad(React.lazy(() => import("@/components/ErrorMessage/500"))),
 		title: "500页面"
+	},
+	{
+		// 未匹配任意路由（未授权/未注册路径）时兜底到 404，避免白屏
+		path: "*",
+		element: lazyLoad(React.lazy(() => import("@/components/ErrorMessage/404"))),
+		title: "404页面"
 	}
 ];
 
@@ -63,8 +69,9 @@ export const dynamicRouter = (mList: RouteObjectType[]) => {
 		item.children && delete item.children;
 		if (item.redirect) item.element = <Navigate to={item.redirect} />;
 		if (item.element && typeof item.element === "string") {
-			// let ip: string = "../views" + String(item.element);
-			item.element = lazyLoad(lazy(modules["/src/views" + item.element + ".tsx"]));
+			const component = modules["/src/views" + item.element + ".tsx"];
+			// 后端下发的 element 未命中本地视图文件时，回退到 404 页面，避免 React.lazy(undefined) 抛错拖垮整棵动态路由
+			item.element = component ? lazyLoad(lazy(component)) : lazyLoad(lazy(() => import("@/components/ErrorMessage/404")));
 		}
 		return item;
 	});

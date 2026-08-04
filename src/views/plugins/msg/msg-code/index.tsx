@@ -158,7 +158,7 @@ const MsgCode: React.FC = () => {
           return formatDataForProTable<MsgCodeModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-msg-code",
           persistenceType: "localStorage"
         }}
         options={{

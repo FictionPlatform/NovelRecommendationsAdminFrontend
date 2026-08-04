@@ -76,12 +76,14 @@ const Role: React.FC = () => {
       align: "left",
       render: (text, record, index, action) => (
         <>
-          <SwitchLoading
-            checked={record.status === STATUS_YES}
-            checkedChildren="开启"
-            unCheckedChildren="关闭"
-            onChange={checked => handleStatusChange(checked, record, action)}
-          />
+          {record.roleKey !== "admin" && (
+            <SwitchLoading
+              checked={record.status === STATUS_YES}
+              checkedChildren="开启"
+              unCheckedChildren="关闭"
+              onChange={checked => handleStatusChange(checked, record, action)}
+            />
+          )}
         </>
       )
     },
@@ -192,12 +194,16 @@ const Role: React.FC = () => {
 
   const handleStatusChange = async (checked: boolean, record: RoleModel, action: any) => {
     const newStatus = checked ? STATUS_YES : STATUS_NO;
-    const { code, msg } = await changeRoleStatusApi(record.id!, newStatus);
-    if (code !== ResultEnum.SUCCESS) {
-      message.error(msg);
-      return;
+    try {
+      const { code, msg } = await changeRoleStatusApi(record.id!, newStatus);
+      if (code !== ResultEnum.SUCCESS) {
+        message.error(msg);
+        return;
+      }
+    } finally {
+      // 无论成功失败都 reload，失败时开关视觉回到实际状态
+      action.reload();
     }
-    action.reload();
   };
 
   const handleDelete = (id: number, done: () => void) => {
@@ -256,7 +262,7 @@ const Role: React.FC = () => {
           return formatDataForProTable<RoleModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-role",
           persistenceType: "localStorage"
         }}
         options={{

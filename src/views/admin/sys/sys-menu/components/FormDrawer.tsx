@@ -150,14 +150,14 @@ const FormDrawer = forwardRef<FormDrawerRef, DrawerProps>(({ onConfirm }, ref) =
       .then(async values => {
         try {
           if (drawer.id! <= 0) {
-            const { msg, code } = await addMenuApi(values);
+            const { msg, code } = await addMenuApi({ ...values, apis: apiSelectKeys });
             if (code !== ResultEnum.SUCCESS) {
               message.error(msg);
               return;
             }
             message.success(msg);
           } else {
-            const { msg, code } = await updateMenuApi(drawer.id!, values);
+            const { msg, code } = await updateMenuApi(drawer.id!, { ...values, apis: apiSelectKeys });
             if (code !== ResultEnum.SUCCESS) {
               message.error(msg);
               return;
@@ -340,7 +340,7 @@ const FormDrawer = forwardRef<FormDrawerRef, DrawerProps>(({ onConfirm }, ref) =
 
           {(menuType === MENU_TYPE_MENU || menuType === MENU_TYPE_BUTTON) && (
             <Col span={24}>
-              <Form.Item name="apis" label="授权接口">
+              <Form.Item label="授权接口">
                 <Transfer
                   dataSource={apiList}
                   showSearch

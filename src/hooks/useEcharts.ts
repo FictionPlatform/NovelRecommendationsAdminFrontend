@@ -15,10 +15,10 @@ export const useEcharts = (options: echarts.EChartsCoreOption, data?: any) => {
 	};
 
 	useEffect(() => {
-		if (data?.length !== 0) {
+		if (myChart?.current) {
 			myChart?.current?.setOption(options);
 		}
-	}, [data]);
+	}, [data, options]);
 
 	useEffect(() => {
 		if (echartsRef?.current) {

@@ -30,6 +30,11 @@ const global = (state: GlobalState = globalState, action: AnyAction) =>
 			case types.SET_TOKEN:
 				draftState.token = action.token;
 				break;
+			case types.RESET_GLOBAL:
+				draftState.token = "";
+				draftState.userInfo = null;
+				draftState.routeList = null;
+				break;
 			case types.SET_USER_INFO:
 				draftState.userInfo = action.userInfo;
 				break;

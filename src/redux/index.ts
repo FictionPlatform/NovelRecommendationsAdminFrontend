@@ -1,6 +1,10 @@
-import { LoginUserInfo } from "@/api/admin/sys/sys-user";
 import { applyMiddleware, combineReducers, compose, legacy_createStore as createStore, Store } from "redux";
-import { persistReducer, persistStore } from "redux-persist";
+import {
+	TypedUseSelectorHook,
+	useDispatch as useReduxDispatch,
+	useSelector as useReduxSelector
+} from "react-redux";
+import { createTransform, persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import reduxPromise from "redux-promise";
 import reduxThunk from "redux-thunk";
@@ -19,10 +23,24 @@ const reducer = combineReducers({
 	breadcrumb
 });
 
+// 仅把 UI 偏好（语言/组件尺寸/主题）落盘；token、userInfo、routeList 等会话数据不写 localStorage，刷新后需重新登录
+const globalUIPersist = createTransform(
+	(inboundState: any) => ({
+		language: inboundState.language,
+		assemblySize: inboundState.assemblySize,
+		themeConfig: inboundState.themeConfig
+	}),
+	(outboundState: any) => outboundState || {},
+	{ whitelist: ["global"] }
+);
+
 // redux 持久化配置
 const persistConfig = {
 	key: "redux-state",
-	storage: storage
+	storage: storage,
+	// 只持久化 UI 类状态，避免 JWT/用户信息/菜单树明文落盘（防 XSS 窃取）
+	whitelist: ["global", "tabs", "menu"],
+	transforms: [globalUIPersist]
 };
 const persistReducerConfig = persistReducer(persistConfig, reducer);
 
@@ -40,12 +58,6 @@ const persistor = persistStore(store);
 
 export { persistor, store };
 export type AppDispatch = typeof store.dispatch;
-export const useDispatch = () => {
-	return (_: any) => {};
-};
-export const useSelector = <T>(selector: (state: any) => T): T => {
-	const uInfo: LoginUserInfo = store.getState().global.userInfo;
-	return uInfo as T; // 返回一个空对象或指定类型的默认值
-};
-
 export type RootState = ReturnType<typeof store.getState>;
+export const useDispatch = () => useReduxDispatch<AppDispatch>();
+export const useSelector: TypedUseSelectorHook<RootState> = useReduxSelector;

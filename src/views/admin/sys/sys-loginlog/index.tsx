@@ -234,7 +234,7 @@ const LoginLog: React.FC = () => {
           return formatDataForProTable<LoginLogModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-loginlog",
           persistenceType: "localStorage"
         }}
         options={{

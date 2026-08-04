@@ -21,7 +21,7 @@ const LayoutHeader = () => {
 			<div className="header-ri">
 				<Language />
 				<Fullscreen />
-				<span className="username">{uInfo.username}</span>
+				<span className="username">{uInfo?.username}</span>
 				<AvatarIcon />
 			</div>
 		</Header>

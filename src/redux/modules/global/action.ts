@@ -9,6 +9,11 @@ export const setToken = (token: string) => ({
 	token
 });
 
+// * 重置会话数据（token/userInfo/routeList），登出/登录失效时使用
+export const resetGlobal = () => ({
+	type: types.RESET_GLOBAL
+});
+
 // * setAssemblySize
 export const setAssemblySize = (assemblySize: string) => ({
 	type: types.SET_ASSEMBLY_SIZE,
@@ -16,7 +21,8 @@ export const setAssemblySize = (assemblySize: string) => ({
 });
 
 export const setUserInfo = (userInfo: LoginUserInfo) => {
-	if (!userInfo.avatar?.startsWith("http")) {
+	// 相对路径头像补全为绝对地址；avatar 为空时不拼接，避免拼出 "http://hostundefined"
+	if (userInfo.avatar && !userInfo.avatar.startsWith("http")) {
 		userInfo.avatar = import.meta.env.VITE_API_URL + userInfo.avatar;
 	}
 

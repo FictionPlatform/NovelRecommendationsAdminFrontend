@@ -6,11 +6,13 @@ const Fullscreen = () => {
 	const [fullScreen, setFullScreen] = useState<boolean>(screenfull.isFullscreen);
 
 	useEffect(() => {
-		screenfull.on("change", () => {
-			if (screenfull.isFullscreen) setFullScreen(true);
-			else setFullScreen(false);
-			return () => screenfull.off("change", () => {});
-		});
+		const handleChange = () => {
+			setFullScreen(screenfull.isFullscreen);
+		};
+		screenfull.on("change", handleChange);
+		return () => {
+			screenfull.off("change", handleChange);
+		};
 	}, []);
 
 	const handleFullScreen = () => {

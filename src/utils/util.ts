@@ -195,8 +195,7 @@ export const deepCopy = <T>(obj: any): T => {
  * @return number
  */
 export function randomNum(min: number, max: number): number {
-	let num = Math.floor(Math.random() * (min - max) + max);
-	return num;
+	return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 export function parseFlatMenuList(menuList: RouteObjectType[]): RouteObjectType[] {

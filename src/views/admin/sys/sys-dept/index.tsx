@@ -191,7 +191,7 @@ const Dept: React.FC = () => {
           return formatDataListForProTable(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-dept",
           persistenceType: "localStorage"
         }}
         options={{

@@ -126,16 +126,18 @@ const OperLog: React.FC = () => {
       width: 150,
       render: (_, data) => (
         <Space>
-          <LoadingButton
-            key="edit"
-            type="link"
-            size="small"
-            icon={<EditOutlined />}
-            onClick={done => handleShowEditFormModal(data.id!, done)}
-          >
-            详情
-          </LoadingButton>
           <HocAuth permission={["admin:sys-oper-log:query"]}>
+            <LoadingButton
+              key="edit"
+              type="link"
+              size="small"
+              icon={<EditOutlined />}
+              onClick={done => handleShowEditFormModal(data.id!, done)}
+            >
+              详情
+            </LoadingButton>
+          </HocAuth>
+          <HocAuth permission={["admin:sys-oper-log:del"]}>
             <LoadingButton
               key="delete"
               type="link"
@@ -208,9 +210,11 @@ const OperLog: React.FC = () => {
   };
 
   const toolBarRender = () => [
-    <LoadingButton type="primary" key="importTable" icon={<CloudDownloadOutlined />} onClick={done => handleExport(done)}>
-      Excel导出
-    </LoadingButton>
+    <HocAuth permission={["admin:sys-oper-log:export"]}>
+      <LoadingButton type="primary" key="importTable" icon={<CloudDownloadOutlined />} onClick={done => handleExport(done)}>
+        Excel导出
+      </LoadingButton>
+    </HocAuth>
   ];
 
   return (
@@ -229,7 +233,7 @@ const OperLog: React.FC = () => {
           return formatDataForProTable<OperLogModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-operlog",
           persistenceType: "localStorage"
         }}
         options={{

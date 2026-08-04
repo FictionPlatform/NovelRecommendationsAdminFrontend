@@ -116,13 +116,13 @@ const UserLevelSelectModal = forwardRef<UserLevelSelectModalRef, ModalProps>(({ 
         bordered
         cardBordered
         defaultSize="small"
-        rowKey="tableName"
+        rowKey="id"
         toolBarRender={false} // 隐藏工具栏
         dateFormatter="string"
         search={{ labelWidth: "auto" }}
         pagination={{ ...pagination, defaultPageSize: 5 }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-level-select-modal",
           persistenceType: "localStorage"
         }}
         onRow={record => ({

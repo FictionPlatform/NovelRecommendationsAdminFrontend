@@ -2,15 +2,25 @@ import NProgress from "@/config/nprogress";
 import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/serviceLoading";
 import { ResultEnum } from "@/enums/httpEnum";
 import { store } from "@/redux";
-import { setToken } from "@/redux/modules/global/action";
+import { resetGlobal } from "@/redux/modules/global/action";
+import { setMenuList } from "@/redux/modules/menu/action";
+import { setTabsList } from "@/redux/modules/tabs/action";
 import { message } from "antd";
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from "axios";
+import { AxiosCanceler } from "./helper/axiosCancel";
 import { checkStatus } from "./helper/checkStatus";
 import { ResultData } from "./interface";
 
 export interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
 	loading?: boolean;
 }
+
+// * 登出/登录失效：清空会话数据（token/userInfo/routeList）及派生的 tabs/menu，避免旧数据残留
+export const resetSession = () => {
+	store.dispatch(resetGlobal());
+	store.dispatch(setTabsList([]));
+	store.dispatch(setMenuList([]));
+};
 
 const config = {
 	// 默认地址请求地址，可在 .env 开头文件中修改
@@ -23,9 +33,11 @@ const config = {
 
 class RequestHttp {
 	service: AxiosInstance;
+	axiosCanceler: AxiosCanceler;
 	public constructor(config: AxiosRequestConfig) {
 		// 实例化axios
 		this.service = axios.create(config);
+		this.axiosCanceler = new AxiosCanceler();
 
 		/**
 		 * @description 请求拦截器
@@ -34,6 +46,8 @@ class RequestHttp {
 		 */
 		this.service.interceptors.request.use(
 			(config: InternalAxiosRequestConfig) => {
+				// * 记录当前请求，重复发起相同请求时取消前一个（配合路由切换时的 removeAllPending）
+				this.axiosCanceler.addPending(config);
 				NProgress.start();
 				// * 如果当前请求不需要显示 loading,在api服务中通过指定的第三个参数: { headers: { noLoading: true } }来控制不显示loading，参见loginApi
 				config.headers!.noLoading || showFullScreenLoading();
@@ -59,9 +73,11 @@ class RequestHttp {
 				NProgress.done();
 				// * 在请求结束后，移除本次请求(关闭loading)
 				tryHideFullScreenLoading();
+				// * 请求结束后从 pending 中移除，允许后续重复请求
+				this.axiosCanceler.removePending(config);
 				// * 登录失效（code == 599）
 				if (data.code == ResultEnum.OVERDUE) {
-					store.dispatch(setToken(""));
+					resetSession();
 					message.error(data.msg);
 					window.location.hash = "/login";
 					return Promise.reject(data);
@@ -76,6 +92,8 @@ class RequestHttp {
 				const { response } = error;
 				NProgress.done();
 				tryHideFullScreenLoading();
+				// * 失败/取消的请求也从 pending 中移除
+				error.config && this.axiosCanceler.removePending(error.config);
 				// 请求超时单独判断，请求超时没有 response
 				if (error.message.indexOf("timeout") !== -1) message.error("请求超时，请稍后再试");
 				// 根据响应的错误状态码，做不同的处理
@@ -98,7 +116,7 @@ class RequestHttp {
 		return this.service.put(url, params, _object);
 	}
 	delete<T>(url: string, params?: any, _object = {}): Promise<ResultData<T>> {
-		return this.service.delete(url, { params, ..._object });
+		return this.service.delete(url, { data: params, ..._object });
 	}
 	download(url: string, params?: object, _object = {}): Promise<BlobPart> {
 		return this.service.get(url, { params, ..._object, responseType: "blob" });

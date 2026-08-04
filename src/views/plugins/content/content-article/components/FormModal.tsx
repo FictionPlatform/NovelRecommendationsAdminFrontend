@@ -10,7 +10,6 @@ import LoadingButton from "@/components/LoadingButton";
 import RichTextEditor from "@/components/RichTextEditor";
 import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
-import "@wangeditor/editor/dist/css/style.css";
 import { Col, Form, Input, InputNumber, Modal, Row, Select } from "antd";
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import CategorySelectModal, { CategorySelectModalRef } from "../../content-category/components/CategorySelectModal";
@@ -165,8 +164,20 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
               </Form.Item>
             </Col>
             <Col span={24}>
-              <Form.Item name="content" label="内容" rules={[{ required: true, message: "请输入内容" }]}>
-                <RichTextEditor placeholder="请输入内容" />
+              <Form.Item
+                name="content"
+                label="内容"
+                rules={[
+                  { required: true, message: "请输入内容" },
+                  {
+                    validator: (_, value) =>
+                      (value || "").replace(/<[^>]*>/g, "").trim()
+                        ? Promise.resolve()
+                        : Promise.reject(new Error("请输入内容"))
+                  }
+                ]}
+              >
+                <RichTextEditor />
               </Form.Item>
             </Col>
             <Col span={24}>

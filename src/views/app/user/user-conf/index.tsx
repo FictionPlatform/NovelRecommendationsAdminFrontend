@@ -152,7 +152,7 @@ const UserConf: React.FC = () => {
           return formatDataForProTable<UserConfModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-user-conf",
           persistenceType: "localStorage"
         }}
         options={{

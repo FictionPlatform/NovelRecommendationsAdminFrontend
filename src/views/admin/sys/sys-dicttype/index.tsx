@@ -145,7 +145,8 @@ const DictType: React.FC = () => {
   // 事件处理
   const handleToDataClick = async (dictType: string) => {
     await drop(DICT_DATA_URL);
-    navigate(DICT_DATA_URL, { state: { dictType } });
+    // 用 query 参数携带 dictType，刷新页面后仍可恢复（location.state 在刷新时会丢失）
+    navigate(`${DICT_DATA_URL}?dictType=${encodeURIComponent(dictType)}`);
   };
 
   const handleExport = (done: () => void) => {
@@ -227,7 +228,7 @@ const DictType: React.FC = () => {
           return formatDataForProTable<DictTypeModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-dicttype",
           persistenceType: "localStorage"
         }}
         options={{

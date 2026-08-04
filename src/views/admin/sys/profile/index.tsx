@@ -4,7 +4,7 @@ import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
 import { RootState, useDispatch, useSelector } from "@/redux";
 import { removeTab } from "@/redux/modules/tabs";
-import { setUserInfo } from "@/redux/modules/user";
+import { setUserInfo } from "@/redux/modules/global/action";
 import { UserOutlined } from "@ant-design/icons";
 import { Avatar, Card, Col, Divider, Form, Input, Radio, Row, Tabs, Upload } from "antd";
 import ImgCrop from "antd-img-crop";
@@ -14,7 +14,7 @@ import "./index.less";
 
 const Profile: React.FC = () => {
   const dispatch = useDispatch();
-  const userInfo = useSelector((state: RootState) => state.user.userInfo);
+  const userInfo = useSelector((state: RootState) => state.global.userInfo);
   const { pathname, search } = useLocation();
   const path = pathname + search;
 
@@ -26,6 +26,13 @@ const Profile: React.FC = () => {
       const { data: userInfo, code: userCode } = await getUserProfileApi();
       if (userCode === ResultEnum.SUCCESS) {
         dispatch(setUserInfo(userInfo));
+        // 异步拿到用户信息后回填表单（首次渲染时 initialValues 里 userInfo 尚未就绪）
+        userInfoform.setFieldsValue({
+          username: userInfo.username,
+          phone: userInfo.phone,
+          email: userInfo.email,
+          sex: userInfo.sex
+        });
       }
     };
     getUserInfo();
@@ -202,7 +209,7 @@ const Profile: React.FC = () => {
                       <LoadingButton
                         htmlType="button"
                         onClick={done => {
-                          dispatch(removeTab({ path, isCurrent: true }));
+                          removeTab({ path, isCurrent: true });
                           done();
                         }}
                       >
@@ -252,7 +259,7 @@ const Profile: React.FC = () => {
                       <LoadingButton
                         htmlType="button"
                         onClick={done => {
-                          dispatch(removeTab({ path, isCurrent: true }));
+                          removeTab({ path, isCurrent: true });
                           done();
                         }}
                       >

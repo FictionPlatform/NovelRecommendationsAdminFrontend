@@ -14,6 +14,8 @@ export const SET_AUTH_BUTTONS = "SET_AUTH_BUTTONS";
 export const SET_AUTH_ROUTER = "SET_AUTH_ROUTER";
 // 设置 token
 export const SET_TOKEN = "SET_TOKEN";
+// 重置会话数据（token/userInfo/routeList）
+export const RESET_GLOBAL = "RESET_GLOBAL";
 // 设置 userInfo
 export const SET_USER_INFO = "SET_USER_INFO";
 // 设置 menuList

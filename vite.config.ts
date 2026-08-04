@@ -3,7 +3,6 @@ import { resolve } from "path";
 import { ConfigEnv, defineConfig, loadEnv, UserConfig } from "vite";
 import viteCompression from "vite-plugin-compression";
 import { createHtmlPlugin } from "vite-plugin-html";
-import { createSvgIconsPlugin } from "vite-plugin-svg-icons-new";
 import { wrapperEnv } from "./src/utils/getEnv";
 
 // @see: https://vitejs.dev/config/
@@ -58,11 +57,6 @@ export default defineConfig((mode: ConfigEnv): UserConfig => {
 						title: viteEnv.VITE_GLOB_APP_TITLE
 					}
 				}
-			}),
-			// * 使用 svg 图标
-			createSvgIconsPlugin({
-				iconDirs: [resolve(process.cwd(), "src/assets/icons")],
-				symbolId: "icon-[dir]-[name]"
 			}),
 			// * EsLint 报错信息显示在浏览器界面上
 			//eslintPlugin(),

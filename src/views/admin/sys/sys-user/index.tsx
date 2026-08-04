@@ -344,7 +344,7 @@ const User: React.FC = () => {
                 return formatDataForProTable<UserModel>(data);
               }}
               columnsState={{
-                persistenceKey: "use-pro-table-key",
+                persistenceKey: "use-pro-table-key-sys-user",
                 persistenceType: "localStorage"
               }}
               options={{

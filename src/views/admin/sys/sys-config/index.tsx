@@ -265,7 +265,7 @@ const Config: React.FC = () => {
           return formatDataForProTable<ConfigModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-config",
           persistenceType: "localStorage"
         }}
         options={{

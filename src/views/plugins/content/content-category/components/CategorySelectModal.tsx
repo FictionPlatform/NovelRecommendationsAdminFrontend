@@ -95,13 +95,13 @@ const CategorySelectModal = forwardRef<CategorySelectModalRef, ModalProps>(({ on
         bordered
         cardBordered
         defaultSize="small"
-        rowKey="tableName"
+        rowKey="id"
         toolBarRender={false} // 隐藏工具栏
         dateFormatter="string"
         search={{ labelWidth: "auto" }}
         pagination={{ ...pagination, defaultPageSize: 5 }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-category-select-modal",
           persistenceType: "localStorage"
         }}
         onRow={record => ({

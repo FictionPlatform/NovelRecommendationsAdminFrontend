@@ -55,16 +55,19 @@ const LayoutMenu = (props: any) => {
 
 	// 动态渲染 Icon 图标
 	const customIcons: { [key: string]: any } = Icons;
-	const addIcon = (name: string) => {
-		return React.createElement(customIcons[name]);
+	const addIcon = (name?: string) => {
+		if (!name) return null;
+		const iconType = customIcons[name];
+		// 兜底：图标不存在时返回 null，避免 createElement(undefined) 崩溃
+		return iconType ? React.createElement(iconType) : null;
 	};
 
 	// 处理后台返回菜单 key 值为 antd 菜单需要的 key 值
 	const deepLoopFloat = (menuList: RouteObjectType[], newArr: MenuItem[] = []) => {
 		menuList.forEach((item: RouteObjectType) => {
 			if (item.isHidden === SysStatus.FALSE) {
-				if (!item?.children?.length) return newArr.push(getItem(item.title, item.path, addIcon(item.icon!)));
-				newArr.push(getItem(item.title, item.path, addIcon(item.icon!), deepLoopFloat(item.children)));
+				if (!item?.children?.length) return newArr.push(getItem(item.title, item.path, addIcon(item.icon)));
+				newArr.push(getItem(item.title, item.path, addIcon(item.icon), deepLoopFloat(item.children)));
 			}
 			// 下面判断代码解释 *** !item?.children?.length   ==>   (!item.children || item.children.length === 0)
 		});
@@ -96,7 +99,11 @@ const LayoutMenu = (props: any) => {
 	const navigate = useNavigate();
 	const clickMenu: MenuProps["onClick"] = ({ key }: { key: string }) => {
 		const route = searchRoute(key, props.menuList);
-		if (route.isFrame === SysStatus.FALSE) window.open(route.isFrame, "_blank");
+		// isFrame：内嵌 1-是 2-否（后端 sys_menu.go）。非内嵌菜单为外链，应在新窗口打开 path 本身，而不是 isFrame 的字典值
+		if (route.isFrame === SysStatus.FALSE) {
+			window.open(route.path, "_blank");
+			return;
+		}
 		navigate(key);
 	};
 

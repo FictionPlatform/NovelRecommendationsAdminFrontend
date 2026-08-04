@@ -235,7 +235,7 @@ const ContentArticle: React.FC = () => {
           return formatDataForProTable<ContentArticleModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-content-article",
           persistenceType: "localStorage"
         }}
         options={{

@@ -109,7 +109,7 @@ const DBTableModal = forwardRef<DBTableModalRef, ModalProps>(({ onConfirm }, ref
         search={{ labelWidth: "auto" }}
         pagination={{ ...pagination, defaultPageSize: 5 }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-db-table-modal",
           persistenceType: "localStorage"
         }}
         rowSelection={{

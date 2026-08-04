@@ -28,7 +28,7 @@ const App: React.FC = () => {
         // }
         const dk: DiskStatus[] = [];
 
-        data.diskList.forEach((disk, index) => {
+        data.diskList?.forEach((disk, index) => {
           let tmp = {
             key: String(index),
             path: disk.path,
@@ -71,7 +71,7 @@ const App: React.FC = () => {
               <div style={{ textAlign: "left" }}>
                 <div className="monitor-item">
                   <span>CPU主频:</span>
-                  <span>{monitor?.cpu.cpuInfo[0].modelName}</span>
+                  <span>{monitor?.cpu.cpuInfo?.length ? monitor.cpu.cpuInfo[0].modelName : "-"}</span>
                 </div>
                 <Divider />
                 <div className="monitor-item">

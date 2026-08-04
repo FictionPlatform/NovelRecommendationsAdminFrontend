@@ -234,7 +234,7 @@ const Menu: React.FC = () => {
 					};
 				}}
 				columnsState={{
-					persistenceKey: "use-pro-table-key",
+					persistenceKey: "use-pro-table-key-sys-menu",
 					persistenceType: "localStorage"
 				}}
 				options={{

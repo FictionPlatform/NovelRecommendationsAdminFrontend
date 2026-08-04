@@ -9,7 +9,6 @@ import {
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
-import { useDispatch } from "@/redux";
 import { removeTab } from "@/redux/modules/tabs";
 import type { ProColumns } from "@ant-design/pro-components";
 import { EditableProTable } from "@ant-design/pro-components";
@@ -19,7 +18,6 @@ import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 const GenTable: React.FC = () => {
-  const dispatch = useDispatch();
   const { pathname, search, state } = useLocation();
   const path = pathname + search;
   const [baseInfoForm] = Form.useForm();
@@ -189,15 +187,15 @@ const GenTable: React.FC = () => {
 
   const onSubmit = async (done: () => void) => {
     try {
-      baseInfoForm.validateFields();
-      genInfoForm.validateFields();
+      await baseInfoForm.validateFields();
+      await genInfoForm.validateFields();
       const { msg, code } = await updateGenTableApi(dataSource?.id!, dataSource!);
       if (code !== ResultEnum.SUCCESS) {
         message.error(msg);
         return;
       }
       message.success(msg);
-      dispatch(removeTab({ path, isCurrent: true }));
+      removeTab({ path, isCurrent: true });
     } catch (error) {
       console.error("validate error：", error);
       message.error("表单校验失败");
@@ -384,7 +382,7 @@ const GenTable: React.FC = () => {
             fontSize: "14px"
           }}
           onClick={done => {
-            dispatch(removeTab({ path, isCurrent: true }));
+            removeTab({ path, isCurrent: true });
             done();
           }}
         >

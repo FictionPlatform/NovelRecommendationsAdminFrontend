@@ -236,7 +236,7 @@ const ContentAnnouncement: React.FC = () => {
           return formatDataForProTable<ContentAnnouncementModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-content-announcement",
           persistenceType: "localStorage"
         }}
         options={{

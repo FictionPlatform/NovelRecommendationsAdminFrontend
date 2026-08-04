@@ -299,7 +299,7 @@ const GenTable = () => {
           actionRef.current?.reload(false);
           message.success(msg);
         } finally {
-          done;
+          done();
         }
       }
     });
@@ -326,7 +326,7 @@ const GenTable = () => {
           return formatDataForProTable<GenTableModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-gen",
           persistenceType: "localStorage"
         }}
         options={{

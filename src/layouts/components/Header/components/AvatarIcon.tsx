@@ -1,7 +1,9 @@
 import { LoginUserInfo } from "@/api/admin/sys/sys-user";
 import { PROFILE_URL } from "@/config";
 import { store } from "@/redux";
-import { setToken } from "@/redux/modules/global/action";
+import { resetGlobal } from "@/redux/modules/global/action";
+import { setMenuList } from "@/redux/modules/menu/action";
+import { setTabsList } from "@/redux/modules/tabs/action";
 import { ExclamationCircleOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Menu, message, Modal } from "antd";
 import { useRef } from "react";
@@ -11,7 +13,7 @@ import InfoModal from "./InfoModal";
 import PasswordModal from "./PasswordModal";
 
 const AvatarIcon = (props: any) => {
-	const { setToken } = props;
+	const { resetGlobal } = props;
 	const navigate = useNavigate();
 	const uInfo: LoginUserInfo = store.getState().global.userInfo;
 
@@ -30,7 +32,9 @@ const AvatarIcon = (props: any) => {
 			okText: "确认",
 			cancelText: "取消",
 			onOk: () => {
-				setToken("");
+				resetGlobal();
+				store.dispatch(setTabsList([]));
+				store.dispatch(setMenuList([]));
 				message.success("退出登录成功！");
 				navigate("/login");
 			}
@@ -64,7 +68,7 @@ const AvatarIcon = (props: any) => {
 	return (
 		<>
 			<Dropdown overlay={menu} placement="bottom" arrow trigger={["click"]}>
-				<Avatar size="large" src={uInfo.avatar} />
+				<Avatar size="large" src={uInfo?.avatar} />
 			</Dropdown>
 			<InfoModal innerRef={infoRef}></InfoModal>
 			<PasswordModal innerRef={passRef}></PasswordModal>
@@ -72,5 +76,5 @@ const AvatarIcon = (props: any) => {
 	);
 };
 
-const mapDispatchToProps = { setToken };
+const mapDispatchToProps = { resetGlobal };
 export default connect(null, mapDispatchToProps)(AvatarIcon);

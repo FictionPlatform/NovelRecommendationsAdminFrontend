@@ -105,7 +105,7 @@ const Post: React.FC = () => {
       width: 150,
       render: (_, data) => (
         <Space>
-          <HocAuth permission={["admin:sys-post:query"]}>
+          <HocAuth permission={["admin:sys-post:edit"]}>
             <LoadingButton
               key="edit"
               type="link"
@@ -237,7 +237,7 @@ const Post: React.FC = () => {
           return formatDataForProTable<PostModel>(data);
         }}
         columnsState={{
-          persistenceKey: "use-pro-table-key",
+          persistenceKey: "use-pro-table-key-sys-post",
           persistenceType: "localStorage"
         }}
         options={{
