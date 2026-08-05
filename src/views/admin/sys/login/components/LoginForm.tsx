@@ -1,5 +1,5 @@
-import { getMenuRoleApi } from "@/api/admin/sys/sys-menu";
-import { getCaptchaApi, getUserProfileApi, loginApi } from "@/api/admin/sys/sys-user";
+import { getMenuRoleLoginApi } from "@/api/admin/sys/sys-menu";
+import { getCaptchaApi, getUserProfileLoginApi, loginApi } from "@/api/admin/sys/sys-user";
 import { getAllDictTypeWithDataApi } from "@/api/admin/sys/sys-dicttype";
 import LoadingButton from "@/components/LoadingButton";
 import { HOME_URL } from "@/config";
@@ -36,29 +36,31 @@ const LoginForm = (props: any) => {
 		form
 			.validateFields()
 			.then(async values => {
+				let success = false;
 				try {
 					setTabsList([]);
 					message.open({ key: "loading", type: "loading", content: "登录中..." });
 					// values = { ...values, password: md5(values.password), uuid: captchaId };
 					values = { ...values, uuid: captchaId };
-					const { data, msg, code } = await loginApi(values);
+					// 登录流程的请求统一 noLoading：不再每步弹全屏遮罩闪烁，按钮自带 loading + “登录中...”提示
+					const { data, msg, code } = await loginApi(values, { headers: { noLoading: true } });
 					if (code !== ResultEnum.SUCCESS) {
 						message.error(msg);
 						return;
 					}
 					setToken(data.token);
-					const { data: userInfo, code: userCode, msg: userMsg } = await getUserProfileApi();
+					const { data: userInfo, code: userCode, msg: userMsg } = await getUserProfileLoginApi({ headers: { noLoading: true } });
 					if (userCode !== ResultEnum.SUCCESS) {
 						message.error(userMsg);
 						return;
 					}
-					const { data: routeList, code: routeCode, msg: routeMsg } = await getMenuRoleApi();
+					const { data: routeList, code: routeCode, msg: routeMsg } = await getMenuRoleLoginApi({ headers: { noLoading: true } });
 					if (routeCode !== ResultEnum.SUCCESS) {
 						message.error(routeMsg);
 						return;
 					}
 
-					const { data: dictList, code: dictCode, msg: dictMsg } = await getAllDictTypeWithDataApi();
+					const { data: dictList, code: dictCode, msg: dictMsg } = await getAllDictTypeWithDataApi({ headers: { noLoading: true } });
 					if (dictCode !== ResultEnum.SUCCESS) {
 						message.error(dictMsg);
 						return;
@@ -69,16 +71,17 @@ const LoginForm = (props: any) => {
 					setRouteList(routeList);
 					setDictList(dictList);
 
+					success = true;
 					message.success("登录成功！");
 					navigate(HOME_URL);
 				} finally {
-					onCaptcha();
+					// 登录成功已跳走，不再刷新验证码（否则跳转 home 后又发一个 captcha 请求，触发全屏遮罩闪烁）
+					if (!success) onCaptcha();
 					done();
 					message.destroy("loading");
 				}
 			})
 			.catch((error) => {
-				onCaptcha();
 				// 1. 判断是否是请求被取消的错误
 				if (axios.isCancel(error)) {
 					console.log('请求被取消:', error.message);

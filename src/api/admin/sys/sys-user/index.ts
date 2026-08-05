@@ -74,13 +74,13 @@ export interface UserModel {
 }
 
 // login
-export const loginApi = (params: ReqLogin) => {
-  return request.post<RespLogin>(`/admin-api/v1/login`, { ...params, password: md5(params.password!) });
+export const loginApi = (params: ReqLogin, _object = {}) => {
+  return request.post<RespLogin>(`/admin-api/v1/login`, { ...params, password: md5(params.password!) }, _object);
 };
 
-// get captcha
+// get captcha（登录/验证码刷新不弹全屏 loading，避免登录过程与跳转 home 时遮罩闪烁）
 export const getCaptchaApi = () => {
-  return request.get<Captcha>(`/admin-api/v1/captcha`);
+  return request.get<Captcha>(`/admin-api/v1/captcha`, undefined, { headers: { noLoading: true } });
 };
 
 // User logout

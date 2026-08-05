@@ -1,4 +1,5 @@
 import { addDictDataApi, DictDataModel, getDictDataApi, updateDictDataApi } from "@/api/admin/sys/sys-dictdata";
+import { refreshDictList } from "@/api/admin/sys/sys-dicttype";
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
@@ -65,6 +66,7 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
             }
             message.success(msg);
           }
+          refreshDictList();
           reset("");
           setIsModalOpen(false);
           onConfirm();

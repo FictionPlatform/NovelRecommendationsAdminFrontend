@@ -1,6 +1,7 @@
 import request from "@/utils/request";
 import { ReqPage, ResPage } from "@/utils/request/interface";
 import { store } from "@/redux";
+import { setDictList } from "@/redux/modules/global/action";
 
 export interface DictTypeModel {
   id?: number;
@@ -55,8 +56,14 @@ export interface DictTypeWithDataModel {
   }[];
 }
 
-export const getAllDictTypeWithDataApi = () => {
-  return request.get<DictTypeWithDataModel[]>(`/admin-api/v1/admin/sys/sys-dict/type/all-with-data`);
+export const getAllDictTypeWithDataApi = (_object = {}) => {
+  return request.get<DictTypeWithDataModel[]>(`/admin-api/v1/admin/sys/sys-dict/type/all-with-data`, {}, _object);
+};
+
+// * 刷新全局字典缓存（global.dictList），字典类型/字典数据增删改后调用，避免其他页面下拉取到旧数据
+export const refreshDictList = async () => {
+  const { data } = await getAllDictTypeWithDataApi({ headers: { noLoading: true } });
+  store.dispatch(setDictList(data));
 };
 
 // export const getDictOptions = (datas: DictDataModel[]) => {

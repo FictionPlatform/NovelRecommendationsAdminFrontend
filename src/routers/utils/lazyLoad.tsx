@@ -11,12 +11,13 @@ const lazyLoad = (Comp: React.LazyExoticComponent<any>): React.ReactNode => {
 		<Suspense
 			fallback={
 				<Spin
-					size="large"
+					size="small"
 					style={{
 						display: "flex",
 						alignItems: "center",
 						justifyContent: "center",
-						height: "100%"
+						height: "100%",
+						minHeight: 200
 					}}
 				/>
 			}

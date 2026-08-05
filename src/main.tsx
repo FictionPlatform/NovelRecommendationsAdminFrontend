@@ -10,7 +10,6 @@ import "@/styles/common.less";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 
-import React from 'react';
 import ReactDOM from "react-dom/client";
 // react 18 创建（会导致 antd 菜单折叠时闪烁，等待官方修复）
 ReactDOM.createRoot(document.getElementById("root")!).render(

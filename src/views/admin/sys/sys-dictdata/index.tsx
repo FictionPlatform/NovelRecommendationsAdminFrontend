@@ -1,4 +1,5 @@
 import { delDictDataApi, DictDataModel, getDictDataPageApi } from "@/api/admin/sys/sys-dictdata";
+import { refreshDictList } from "@/api/admin/sys/sys-dicttype";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
 import { pagination } from "@/config/proTable";
@@ -152,6 +153,7 @@ const DictData: React.FC = () => {
             return;
           }
           actionRef.current?.reload(false);
+          refreshDictList();
           message.success(msg);
         } finally {
           done();

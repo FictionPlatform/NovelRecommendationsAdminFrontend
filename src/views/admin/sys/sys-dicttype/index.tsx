@@ -1,4 +1,4 @@
-import { delDictTypeApi, DictTypeModel, exportDictTypeApi, getDictTypePageApi } from "@/api/admin/sys/sys-dicttype";
+import { delDictTypeApi, DictTypeModel, exportDictTypeApi, getDictTypePageApi, refreshDictList } from "@/api/admin/sys/sys-dicttype";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
 import { DICT_DATA_URL } from "@/config";
@@ -193,6 +193,7 @@ const DictType: React.FC = () => {
             return;
           }
           actionRef.current?.reload(false);
+          refreshDictList();
           message.success(msg);
         } finally {
           done();

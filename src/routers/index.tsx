@@ -4,7 +4,7 @@ import useMessage from "@/hooks/useMessage";
 import { store } from "@/redux";
 import { parseFlatMenuList } from "@/utils/util";
 import Login from "@/views/admin/sys/login/index";
-import React, { lazy, useEffect, useState } from "react";
+import React, { lazy, useMemo } from "react";
 import { Navigate, useRoutes } from "react-router-dom";
 import { LayoutIndex } from "./constant";
 import lazyLoad from "./utils/lazyLoad";
@@ -43,18 +43,14 @@ export const rootRouter: RouteObjectType[] = [
 ];
 
 const Router = () => {
-	const [routerList, setRouterList] = useState<RouteObjectType[]>(rootRouter);
-	const rList: RouteObjectType[] = store.getState().global.routeList;
 	useMessage();
-	// const token: string = store.getState().global.token;
-	// const uInfo: LoginUserInfo = store.getState().global.userinfo;
-	useEffect(() => {
-		if (rList && rList.length > 0) {
-			setRouterList([...rootRouter, ...dynamicRouter(rList)]);
-		} else {
-			setRouterList([...rootRouter]);
-		}
-	}, [rList]);
+	// 渲染时直接按 store 中的 routeList 同步计算路由表（useMemo 保持引用稳定），
+	// 避免 useEffect 滞后注册导致跳转时先匹配到 "*" 兜底 404、再重建路由表造成页面闪烁
+	const rList: RouteObjectType[] = store.getState().global.routeList;
+	const routerList = useMemo(
+		() => (rList && rList.length > 0 ? [...rootRouter, ...dynamicRouter(rList)] : [...rootRouter]),
+		[rList]
+	);
 
 	const routes = useRoutes(routerList);
 	return routes;

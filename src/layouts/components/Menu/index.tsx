@@ -120,6 +120,7 @@ const LayoutMenu = (props: any) => {
 					items={menuList}
 					onClick={clickMenu}
 					onOpenChange={onOpenChange}
+					inlineCollapsed={false}
 				></Menu>
 			</Spin>
 		</div>
