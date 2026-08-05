@@ -1,9 +1,10 @@
 import { getMenuRoleApi } from "@/api/admin/sys/sys-menu";
 import { getCaptchaApi, getUserProfileApi, loginApi } from "@/api/admin/sys/sys-user";
+import { getAllDictTypeWithDataApi } from "@/api/admin/sys/sys-dicttype";
 import LoadingButton from "@/components/LoadingButton";
 import { HOME_URL } from "@/config";
 import { ResultEnum } from "@/enums/httpEnum";
-import { setRouteList, setToken, setUserInfo } from "@/redux/modules/global/action";
+import { setDictList, setRouteList, setToken, setUserInfo } from "@/redux/modules/global/action";
 import { setTabsList } from "@/redux/modules/tabs/action";
 import { CloseCircleOutlined, LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Form, Input, message } from "antd";
@@ -15,7 +16,7 @@ import axios from 'axios';
 
 const LoginForm = (props: any) => {
 	const { t } = useTranslation();
-	const { setToken, setRouteList, setUserInfo, setTabsList } = props;
+	const { setToken, setRouteList, setUserInfo, setTabsList, setDictList } = props;
 	const [form] = Form.useForm();
 	const [captchaInfo, setCaptchaInfo] = useState("");
 	const [captchaId, setCaptchaId] = useState("");
@@ -57,8 +58,16 @@ const LoginForm = (props: any) => {
 						return;
 					}
 
+					const { data: dictList, code: dictCode, msg: dictMsg } = await getAllDictTypeWithDataApi();
+					if (dictCode !== ResultEnum.SUCCESS) {
+						message.error(dictMsg);
+						return;
+					}
+					
+
 					setUserInfo(userInfo);
 					setRouteList(routeList);
+					setDictList(dictList);
 
 					message.success("登录成功！");
 					navigate(HOME_URL);
@@ -128,5 +137,5 @@ const LoginForm = (props: any) => {
 	);
 };
 
-const mapDispatchToProps = { setToken, setUserInfo, setRouteList, setTabsList };
+const mapDispatchToProps = { setToken, setUserInfo, setRouteList, setTabsList, setDictList };
 export default connect(null, mapDispatchToProps)(LoginForm);

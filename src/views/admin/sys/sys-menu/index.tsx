@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { delMenuApi, getMenuListApi, MenuModel } from "@/api/admin/sys/sys-menu";
 import HocAuth from "@/components/HocAuth";
 import { Icon } from "@/components/Icon";
@@ -143,21 +143,8 @@ const Menu: React.FC = () => {
 	];
 
 	useEffect(() => {
-		const initData = async () => {
-			const { data: isHiddenData, msg: isHiddenMsg, code: isHiddenCode } = await getDictsApi("admin_sys_menu_show_hide");
-			if (isHiddenCode !== ResultEnum.SUCCESS) {
-				message.error(isHiddenMsg);
-				return;
-			}
-			setIsHiddenOptions(getDictOptions(isHiddenData));
-			const { data: menuTypeData, msg: menuTypeMsg, code: menuTypeCode } = await getDictsApi("admin_sys_menu_type");
-			if (menuTypeCode !== ResultEnum.SUCCESS) {
-				message.error(menuTypeMsg);
-				return;
-			}
-			setMenuTypeOptions(getDictOptions(menuTypeData));
-		};
-		initData();
+		setIsHiddenOptions(getDictOptions("admin_sys_menu_show_hide"));
+		setMenuTypeOptions(getDictOptions("admin_sys_menu_type"));
 	}, []);
 
 	const handleShowAddFormModal = (id: number, done: () => void) => {

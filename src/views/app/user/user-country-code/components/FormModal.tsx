@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import {
   addUserCountryCodeApi,
   getUserCountryCodeApi,
@@ -8,6 +8,7 @@ import {
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
+import { store } from "@/redux";
 import { Form, Input, Modal, Select } from "antd";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 
@@ -42,16 +43,9 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
       setIsModalOpen(true);
     }
   }));
+
   useEffect(() => {
-    const initData = async () => {
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("admin_sys_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
-    };
-    initData();
+    setStatusOptions(getDictOptions("admin_sys_status"));
   }, []);
 
   const reset = () => {

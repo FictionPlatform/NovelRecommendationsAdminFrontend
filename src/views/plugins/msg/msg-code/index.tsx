@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { exportMsgCodeApi, getMsgCodePageApi, MsgCodeModel } from "@/api/plugins/msg/msg-code";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -94,21 +94,8 @@ const MsgCode: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: codeTypeData, msg: codeTypeMsg, code: codeTypeCode } = await getDictsApi("plugin_msg_code_type");
-      if (codeTypeCode !== ResultEnum.SUCCESS) {
-        message.error(codeTypeMsg);
-        return;
-      }
-      setCodeTypeOptions(getDictOptions(codeTypeData));
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("plugin_msg_sendstatus");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
-    };
-    initData();
+    setCodeTypeOptions(getDictOptions("plugin_msg_code_type"));
+    setStatusOptions(getDictOptions("plugin_msg_sendstatus"));
   }, []);
 
   const handleExport = (done: () => void) => {

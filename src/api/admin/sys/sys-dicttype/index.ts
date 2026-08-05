@@ -1,5 +1,6 @@
 import request from "@/utils/request";
 import { ReqPage, ResPage } from "@/utils/request/interface";
+import { store } from "@/redux";
 
 export interface DictTypeModel {
   id?: number;
@@ -39,4 +40,32 @@ export const delDictTypeApi = (params: number[]) => {
 
 export const exportDictTypeApi = (query: object) => {
   return request.download(`/admin-api/v1/admin/sys/sys-dict/type/export`, query);
+};
+
+export interface DictTypeWithDataModel {
+  id?: number;
+  dict_type?: string;
+  dict_name?: string;
+  dictData?: {
+    id?: number;
+    dict_type?: string;
+    dict_label?: string;
+    dict_value?: string;
+    status?: string;
+  }[];
+}
+
+export const getAllDictTypeWithDataApi = () => {
+  return request.get<DictTypeWithDataModel[]>(`/admin-api/v1/admin/sys/sys-dict/type/all-with-data`);
+};
+
+// export const getDictOptions = (datas: DictDataModel[]) => {
+//   return new Map(datas.map(({ dictValue, dictLabel }) => [dictValue || "", dictLabel || ""]));
+// };
+
+export const getDictOptions = (type: string) => {
+  const dictList = store.getState().global.dictList as DictTypeWithDataModel[];
+  const dict = dictList.find(item => item.dict_type === type);
+  const dictData = dict?.dictData || [];
+  return new Map(dictData.map(({ dict_value, dict_label }) => [dict_value || "", dict_label || ""]));
 };

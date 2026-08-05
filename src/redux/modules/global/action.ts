@@ -1,5 +1,6 @@
 import { RouteObjectType } from "@/api/admin/sys/sys-menu";
 import { LoginUserInfo } from "@/api/admin/sys/sys-user";
+import { DictTypeWithDataModel } from "@/api/admin/sys/sys-dicttype";
 import { ThemeConfigProp } from "@/redux/interface/index";
 import * as types from "@/redux/mutation-types";
 
@@ -35,6 +36,12 @@ export const setUserInfo = (userInfo: LoginUserInfo) => {
 export const setRouteList = (routeList: RouteObjectType[]) => ({
 	type: types.SET_ROUTE_LIST,
 	routeList
+});
+
+// * setDictList（登录后全量字典：每个元素含 dict_type/dict_name/dictData）
+export const setDictList = (dictList: DictTypeWithDataModel[]) => ({
+	type: types.SET_DICT_LIST,
+	dictList
 });
 
 // * setLanguage

@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { getUserConfPageApi, UserConfModel } from "@/api/app/user/user-conf";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -116,15 +116,7 @@ const UserConf: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: canLoginData, msg: canLoginMsg, code: canLoginCode } = await getDictsApi("admin_sys_yes_no");
-      if (canLoginCode !== ResultEnum.SUCCESS) {
-        message.error(canLoginMsg);
-        return;
-      }
-      setCanLoginOptions(getDictOptions(canLoginData));
-    };
-    initData();
+      setCanLoginOptions(getDictOptions("admin_sys_yes_no"));
   }, []);
 
   const handleShowEditFormModal = (id: number, done: () => void) => {

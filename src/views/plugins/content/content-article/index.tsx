@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import {
   ContentArticleModel,
   delContentArticleApi,
@@ -131,15 +131,7 @@ const ContentArticle: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("admin_sys_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
-    };
-    initData();
+      setStatusOptions(getDictOptions("admin_sys_status"));
   }, []);
 
   const handleShowAddFormModal = (done: () => void) => {

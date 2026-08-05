@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { addUserLevelApi, getUserLevelApi, updateUserLevelApi, UserLevelModel } from "@/api/app/user/user-level";
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
@@ -38,15 +38,7 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
     }
   }));
   useEffect(() => {
-    const initData = async () => {
-      const { data: levelTypeData, msg: levelTypeMsg, code: levelTypeCode } = await getDictsApi("app_user_level_type");
-      if (levelTypeCode !== ResultEnum.SUCCESS) {
-        message.error(levelTypeMsg);
-        return;
-      }
-      setLevelTypeOptions(getDictOptions(levelTypeData));
-    };
-    initData();
+      setLevelTypeOptions(getDictOptions("app_user_level_type"));
   }, []);
 
   const reset = () => {

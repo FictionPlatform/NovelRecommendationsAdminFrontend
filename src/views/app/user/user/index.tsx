@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { exportUserApi, getUserPageApi, UserModel } from "@/api/app/user/user";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -182,21 +182,8 @@ const User: React.FC = () => {
   ];
 
   useEffect(() => {
-    const initData = async () => {
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("admin_sys_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
-      const { data: levelTypeData, msg: levelTypeMsg, code: levelTypeCode } = await getDictsApi("app_user_level_type");
-      if (levelTypeCode !== ResultEnum.SUCCESS) {
-        message.error(levelTypeMsg);
-        return;
-      }
-      setLevelTypeOptions(getDictOptions(levelTypeData));
-    };
-    initData();
+      setStatusOptions(getDictOptions("admin_sys_status"));
+      setLevelTypeOptions(getDictOptions("app_user_level_type"));
   }, []);
 
   const handleShowAddFormModal = (done: () => void) => {

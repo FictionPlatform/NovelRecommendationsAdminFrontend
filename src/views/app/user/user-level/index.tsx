@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { delUserLevelApi, exportUserLevelApi, getUserLevelPageApi, UserLevelModel } from "@/api/app/user/user-level";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -119,15 +119,7 @@ const UserLevel: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: levelTypeData, msg: levelTypeMsg, code: levelTypeCode } = await getDictsApi("app_user_level_type");
-      if (levelTypeCode !== ResultEnum.SUCCESS) {
-        message.error(levelTypeMsg);
-        return;
-      }
-      setLevelTypeOptions(getDictOptions(levelTypeData));
-    };
-    initData();
+      setLevelTypeOptions(getDictOptions("app_user_level_type"));
   }, []);
 
   const handleShowAddFormModal = (done: () => void) => {

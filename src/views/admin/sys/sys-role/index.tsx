@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { changeRoleStatusApi, delRoleApi, getRolePageApi, RoleModel } from "@/api/admin/sys/sys-role";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -152,21 +152,8 @@ const Role: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: dataScopeData, msg: dataScopeMsg, code: dataScopeCode } = await getDictsApi("admin_sys_role_data_scope");
-      if (dataScopeCode !== ResultEnum.SUCCESS) {
-        message.error(dataScopeMsg);
-        return;
-      }
-      setDataScopeOptions(getDictOptions(dataScopeData));
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("admin_sys_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
-    };
-    initData();
+      setDataScopeOptions(getDictOptions("admin_sys_role_data_scope"));
+      setStatusOptions(getDictOptions("admin_sys_status"));
   }, []);
 
   const handleShowAddFormModal = (done: () => void) => {

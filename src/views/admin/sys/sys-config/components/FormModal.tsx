@@ -1,5 +1,5 @@
 import { addConfigApi, ConfigModel, getConfigApi, updateConfigApi } from "@/api/admin/sys/sys-config";
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
@@ -39,25 +39,8 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
     }
   }));
   useEffect(() => {
-    const initData = async () => {
-      const { data: configTypeData, msg: configTypeMsg, code: configTypeCode } = await getDictsApi("admin_sys_config_type");
-      if (configTypeCode !== ResultEnum.SUCCESS) {
-        message.error(configTypeMsg);
-        return;
-      }
-      setConfigTypeOptions(getDictOptions(configTypeData));
-      const {
-        data: isFrontendData,
-        msg: isFrontendMsg,
-        code: isFrontendCode
-      } = await getDictsApi("admin_sys_config_is_frontend");
-      if (isFrontendCode !== ResultEnum.SUCCESS) {
-        message.error(isFrontendMsg);
-        return;
-      }
-      setIsFrontendOptions(getDictOptions(isFrontendData));
-    };
-    initData();
+      setConfigTypeOptions(getDictOptions("admin_sys_config_type"));
+      setIsFrontendOptions(getDictOptions("admin_sys_config_is_frontend"));
   }, []);
 
   const reset = () => {

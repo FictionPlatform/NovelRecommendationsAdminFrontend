@@ -1,5 +1,5 @@
 import { DeptTreeRole, roleDeptTreeselectApi } from "@/api/admin/sys/sys-dept";
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { dataScopeApi, getRoleApi, RoleModel } from "@/api/admin/sys/sys-role";
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
@@ -61,15 +61,7 @@ const DataScopeFormModal = forwardRef<DataScopeFormModalRef, ModalProps>(({ onCo
   };
 
   useEffect(() => {
-    const initData = async () => {
-      const { data: dataScopeData, msg: dataScopeMsg, code: dataScopeCode } = await getDictsApi("admin_sys_role_data_scope");
-      if (dataScopeCode !== ResultEnum.SUCCESS) {
-        message.error(dataScopeMsg);
-        return;
-      }
-      setDataScopeOptions(getDictOptions(dataScopeData));
-    };
-    initData();
+      setDataScopeOptions(getDictOptions("admin_sys_role_data_scope"));
   }, []);
 
   const reset = () => {

@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { MenuTreeRole, roleMenuTreeselectApi } from "@/api/admin/sys/sys-menu";
 import { addRoleApi, getRoleApi, RoleModel, updateRoleApi } from "@/api/admin/sys/sys-role";
 import LoadingButton from "@/components/LoadingButton";
@@ -54,15 +54,7 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
   };
 
   useEffect(() => {
-    const initData = async () => {
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("admin_sys_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
-    };
-    initData();
+      setStatusOptions(getDictOptions("admin_sys_status"));
   }, []);
 
   const reset = () => {

@@ -9,6 +9,7 @@ const globalState: GlobalState = {
 	routeList: null,
 	assemblySize: "middle",
 	language: "",
+	dictList: [],
 	themeConfig: {
 		// 默认 primary 主题颜色
 		primary: "#1890ff",
@@ -34,12 +35,16 @@ const global = (state: GlobalState = globalState, action: AnyAction) =>
 				draftState.token = "";
 				draftState.userInfo = null;
 				draftState.routeList = null;
+				draftState.dictList = [];
 				break;
 			case types.SET_USER_INFO:
 				draftState.userInfo = action.userInfo;
 				break;
 			case types.SET_ROUTE_LIST:
 				draftState.routeList = action.routeList;
+				break;
+			case types.SET_DICT_LIST:
+				draftState.dictList = action.dictList;
 				break;
 			case types.SET_ASSEMBLY_SIZE:
 				draftState.assemblySize = action.assemblySize;

@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { getUserConfApi, updateUserConfApi, UserConfModel } from "@/api/app/user/user-conf";
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
@@ -33,15 +33,7 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
     }
   }));
   useEffect(() => {
-    const initData = async () => {
-      const { data: canLoginData, msg: canLoginMsg, code: canLoginCode } = await getDictsApi("admin_sys_yes_no");
-      if (canLoginCode !== ResultEnum.SUCCESS) {
-        message.error(canLoginMsg);
-        return;
-      }
-      setCanLoginOptions(getDictOptions(canLoginData));
-    };
-    initData();
+      setCanLoginOptions(getDictOptions("admin_sys_yes_no"));
   }, []);
 
   const reset = () => {

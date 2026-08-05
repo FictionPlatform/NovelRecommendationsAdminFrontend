@@ -1,4 +1,5 @@
 import type { SizeType } from "antd/lib/config-provider/SizeContext";
+import type { DictTypeWithDataModel } from "@/api/admin/sys/sys-dicttype";
 
 /* themeConfigProp */
 export interface ThemeConfigProp {
@@ -17,6 +18,7 @@ export interface GlobalState {
 	assemblySize: SizeType;
 	language: string;
 	themeConfig: ThemeConfigProp;
+	dictList: DictTypeWithDataModel[];
 }
 
 /* MenuState */

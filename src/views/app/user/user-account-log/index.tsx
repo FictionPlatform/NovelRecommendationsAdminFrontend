@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { exportUserAccountLogApi, getUserAccountLogPageApi, UserAccountLogModel } from "@/api/app/user/user-account-log";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -121,21 +121,8 @@ const UserAccountLog: React.FC = () => {
   ];
 
   useEffect(() => {
-    const initData = async () => {
-      const { data: moneyTypeData, msg: moneyTypeMsg, code: moneyTypeCode } = await getDictsApi("app_money_type");
-      if (moneyTypeCode !== ResultEnum.SUCCESS) {
-        message.error(moneyTypeMsg);
-        return;
-      }
-      setMoneyTypeOptions(getDictOptions(moneyTypeData));
-      const { data: changeTypeData, msg: changeTypeMsg, code: changeTypeCode } = await getDictsApi("app_account_change_type");
-      if (changeTypeCode !== ResultEnum.SUCCESS) {
-        message.error(changeTypeMsg);
-        return;
-      }
-      setChangeTypeOptions(getDictOptions(changeTypeData));
-    };
-    initData();
+      setMoneyTypeOptions(getDictOptions("app_money_type"));
+      setChangeTypeOptions(getDictOptions("app_account_change_type"));
   }, []);
 
   const handleExport = (done: () => void) => {

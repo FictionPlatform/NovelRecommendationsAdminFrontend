@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { exportUserOperLogApi, getUserOperLogPageApi, UserOperLogModel } from "@/api/app/user/user-oper-log";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -123,21 +123,8 @@ const UserOperLog: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: actionTypeData, msg: actionTypeMsg, code: actionTypeCode } = await getDictsApi("app_user_action_type");
-      if (actionTypeCode !== ResultEnum.SUCCESS) {
-        message.error(actionTypeMsg);
-        return;
-      }
-      setActionTypeOptions(getDictOptions(actionTypeData));
-      const { data: byTypeData, msg: byTypeMsg, code: byTypeCode } = await getDictsApi("app_user_by_type");
-      if (byTypeCode !== ResultEnum.SUCCESS) {
-        message.error(byTypeMsg);
-        return;
-      }
-      setByTypeOptions(getDictOptions(byTypeData));
-    };
-    initData();
+      setActionTypeOptions(getDictOptions("app_user_action_type"));
+      setByTypeOptions(getDictOptions("app_user_by_type"));
   }, []);
 
   const handleExport = (done: () => void) => {

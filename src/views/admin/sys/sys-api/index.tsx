@@ -1,5 +1,5 @@
 import { ApiModel, delApiApi, exportApiApi, getApiPageApi, syncApiApi } from "@/api/admin/sys/sys-api";
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
 import { pagination } from "@/config/proTable";
@@ -181,27 +181,9 @@ const Api: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: methodData, msg: methodMsg, code: methodCode } = await getDictsApi("admin_sys_api_method");
-      if (methodCode !== ResultEnum.SUCCESS) {
-        message.error(methodMsg);
-        return;
-      }
-      setMethodOptions(getDictOptions(methodData));
-      const { data: apiTypeData, msg: apiTypeMsg, code: apiTypeCode } = await getDictsApi("admin_sys_config_type");
-      if (apiTypeCode !== ResultEnum.SUCCESS) {
-        message.error(apiTypeMsg);
-        return;
-      }
-      setApiTypeOptions(getDictOptions(apiTypeData));
-      const { data: menuTypeData, msg: menuTypeMsg, code: menuTypeCode } = await getDictsApi("admin_sys_menu_type");
-      if (menuTypeCode !== ResultEnum.SUCCESS) {
-        message.error(menuTypeMsg);
-        return;
-      }
-      setMenuTypeOptions(getDictOptions(menuTypeData));
-    };
-    initData();
+    setMethodOptions(getDictOptions("admin_sys_api_method"));
+    setApiTypeOptions(getDictOptions("admin_sys_config_type"));
+    setMenuTypeOptions(getDictOptions("admin_sys_menu_type"));
   }, []);
 
   const handleShowEditFormModal = (id: number, done: () => void) => {

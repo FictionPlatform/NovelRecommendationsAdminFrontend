@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { getAllDictTypesApi } from "@/api/admin/sys/sys-dicttype";
 import {
   GenTableColumnModel,
@@ -212,48 +212,16 @@ const GenTable: React.FC = () => {
         return;
       }
 
-      const { data: sysGenGoTypeData, msg: sysGenGoTypeMsg, code: sysGenGoTypeCode } = await getDictsApi("admin_sys_gen_go_type");
-      if (sysGenGoTypeCode !== ResultEnum.SUCCESS) {
-        message.error(sysGenGoTypeMsg);
-        return;
-      }
-
-      const {
-        data: sysGenQueryTypeData,
-        msg: sysGenQueryTypeMsg,
-        code: sysGenQueryTypeCode
-      } = await getDictsApi("admin_sys_gen_query_type");
-      if (sysGenQueryTypeCode !== ResultEnum.SUCCESS) {
-        message.error(sysGenQueryTypeMsg);
-        return;
-      }
-
-      const {
-        data: sysGenHtmlTypeData,
-        msg: sysGenHtmlTypeMsg,
-        code: sysGenHtmlTypeCode
-      } = await getDictsApi("admin_sys_gen_html_type");
-      if (sysGenHtmlTypeCode !== ResultEnum.SUCCESS) {
-        message.error(sysGenHtmlTypeMsg);
-        return;
-      }
-
-      const { data: sysYesNoData, msg: sysYesNoMsg, code: sysYesNoCode } = await getDictsApi("admin_sys_yes_no");
-      if (sysYesNoCode !== ResultEnum.SUCCESS) {
-        message.error(sysYesNoMsg);
-        return;
-      }
-
       const { data: allDictTypesData, msg: allDictTypesMsg, code: allDictTypesCode } = await getAllDictTypesApi();
       if (allDictTypesCode !== ResultEnum.SUCCESS) {
         message.error(allDictTypesMsg);
         return;
       }
 
-      setSysGenGoTypeOptoins(getDictOptions(sysGenGoTypeData));
-      setSysGenQueryTypeOptoins(getDictOptions(sysGenQueryTypeData));
-      setSysGenHtmlTypeOptoins(getDictOptions(sysGenHtmlTypeData));
-      setSysYesNoOptoins(getDictOptions(sysYesNoData));
+      setSysGenGoTypeOptoins(getDictOptions("admin_sys_gen_go_type"));
+      setSysGenQueryTypeOptoins(getDictOptions("admin_sys_gen_query_type"));
+      setSysGenHtmlTypeOptoins(getDictOptions("admin_sys_gen_html_type"));
+      setSysYesNoOptoins(getDictOptions("admin_sys_yes_no"));
 
       setAllDictTypeOptions(new Map(allDictTypesData.map(({ dictType, dictName }) => [dictType || "", dictName || ""])));
       setAutoQueryDictTypeOptions(new Map(allDictTypesData.map(({ dictType, dictName }) => [dictType || "", dictName || ""])));

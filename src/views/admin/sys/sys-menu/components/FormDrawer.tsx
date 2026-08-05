@@ -1,5 +1,5 @@
 import { ApiModel, getApiListApi } from "@/api/admin/sys/sys-api";
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { addMenuApi, getMenuApi, getMenuListApi, MenuModel, updateMenuApi } from "@/api/admin/sys/sys-menu";
 import IconSelect from "@/components/IconSelect";
 import LoadingButton from "@/components/LoadingButton";
@@ -87,38 +87,11 @@ const FormDrawer = forwardRef<FormDrawerRef, DrawerProps>(({ onConfirm }, ref) =
   }));
   useEffect(() => {
     const getDict = async () => {
-      const { data: isFrameData, msg: isFrameMsg, code: isFrameCode } = await getDictsApi("admin_sys_yes_no");
-      if (isFrameCode !== ResultEnum.SUCCESS) {
-        message.error(isFrameMsg);
-        return;
-      }
-      setIsFrameOptions(getDictOptions(isFrameData));
-
-      const { data: isAffixData, msg: isAffixMsg, code: isAffixCode } = await getDictsApi("admin_sys_yes_no");
-      if (isAffixCode !== ResultEnum.SUCCESS) {
-        message.error(isAffixMsg);
-        return;
-      }
-      setIsAffixOptions(getDictOptions(isAffixData));
-
-      const { data: isHiddenData, msg: isHiddenMsg, code: isHiddenCode } = await getDictsApi("admin_sys_menu_show_hide");
-      if (isHiddenCode !== ResultEnum.SUCCESS) {
-        message.error(isHiddenMsg);
-        return;
-      }
-      setIsHiddenOptions(getDictOptions(isHiddenData));
-      const { data: isKeepAliveData, msg: isKeepAliveMsg, code: isKeepAliveCode } = await getDictsApi("admin_sys_yes_no");
-      if (isKeepAliveCode !== ResultEnum.SUCCESS) {
-        message.error(isKeepAliveMsg);
-        return;
-      }
-      setIsKeepAliveOptions(getDictOptions(isKeepAliveData));
-      const { data: menuTypeData, msg: menuTypeMsg, code: menuTypeCode } = await getDictsApi("admin_sys_menu_type");
-      if (menuTypeCode !== ResultEnum.SUCCESS) {
-        message.error(menuTypeMsg);
-        return;
-      }
-      setMenuTypeOptions(getDictOptions(menuTypeData));
+      setIsFrameOptions(getDictOptions("admin_sys_yes_no"));
+      setIsAffixOptions(getDictOptions("admin_sys_yes_no"));
+      setIsHiddenOptions(getDictOptions("admin_sys_menu_show_hide"));
+      setIsKeepAliveOptions(getDictOptions("admin_sys_yes_no"));
+      setMenuTypeOptions(getDictOptions("admin_sys_menu_type"));
 
       const { data: apiData, msg: apiMsg, code: apiCode } = await getApiListApi({});
       if (apiCode !== ResultEnum.SUCCESS) {

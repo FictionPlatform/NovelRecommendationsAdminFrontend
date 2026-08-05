@@ -1,5 +1,6 @@
 import request from "@/utils/request";
 import { ReqPage, ResPage } from "@/utils/request/interface";
+import { store } from "@/redux";
 
 export interface DictDataModel {
   id?: number;

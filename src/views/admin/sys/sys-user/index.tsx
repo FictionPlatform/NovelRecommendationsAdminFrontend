@@ -1,5 +1,5 @@
 import { DeptModel, getDeptTreeApi } from "@/api/admin/sys/sys-dept";
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { changeUserStatusApi, delUserApi, getUserPageApi, UserModel } from "@/api/admin/sys/sys-user";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -195,13 +195,9 @@ const User: React.FC = () => {
       //   message.error(sexMsg);
       //   return;
       // }
-      // setSexOptions(getDictOptions(sexData));
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("admin_sys_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
+      // setSexOptions(getDictOptions("admin_sys_user_sex"));
+
+      setStatusOptions(getDictOptions("admin_sys_status"));
 
       const { data: deptListData, msg: deptListMsg, code: deptListCode } = await getDeptTreeApi({});
       if (deptListCode !== ResultEnum.SUCCESS) {

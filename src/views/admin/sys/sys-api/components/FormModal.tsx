@@ -1,5 +1,5 @@
 import { ApiModel, getApiApi, updateApiApi } from "@/api/admin/sys/sys-api";
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
@@ -34,21 +34,8 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
     }
   }));
   useEffect(() => {
-    const initData = async () => {
-      const { data: methodData, msg: methodMsg, code: methodCode } = await getDictsApi("admin_sys_api_method");
-      if (methodCode !== ResultEnum.SUCCESS) {
-        message.error(methodMsg);
-        return;
-      }
-      setMethodOptions(getDictOptions(methodData));
-      const { data: apiTypeData, msg: apiTypeMsg, code: apiTypeCode } = await getDictsApi("admin_sys_config_type");
-      if (apiTypeCode !== ResultEnum.SUCCESS) {
-        message.error(apiTypeMsg);
-        return;
-      }
-      setApiTypeOptions(getDictOptions(apiTypeData));
-    };
-    initData();
+      setMethodOptions(getDictOptions("admin_sys_api_method"));
+      setApiTypeOptions(getDictOptions("admin_sys_config_type"));
   }, []);
 
   const reset = () => {

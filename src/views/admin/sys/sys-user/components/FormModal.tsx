@@ -1,5 +1,5 @@
 import { DeptModel, getDeptTreeApi } from "@/api/admin/sys/sys-dept";
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { getPostTotalListApi } from "@/api/admin/sys/sys-post";
 import { getRoleTotalListApi } from "@/api/admin/sys/sys-role";
 import { addUserApi, getUserApi, updateUserApi, UserModel } from "@/api/admin/sys/sys-user";
@@ -49,18 +49,8 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
   }));
   useEffect(() => {
     const initData = async () => {
-      const { data: sexData, msg: sexMsg, code: sexCode } = await getDictsApi("admin_sys_user_sex");
-      if (sexCode !== ResultEnum.SUCCESS) {
-        message.error(sexMsg);
-        return;
-      }
-      setSexOptions(getDictOptions(sexData));
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("admin_sys_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
+      setSexOptions(getDictOptions("admin_sys_user_sex"));
+      setStatusOptions(getDictOptions("admin_sys_status"));
       const { data: postData, msg: postMsg, code: postCode } = await getPostTotalListApi({});
       if (postCode !== ResultEnum.SUCCESS) {
         message.error(postMsg);

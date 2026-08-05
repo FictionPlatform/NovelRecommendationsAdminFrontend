@@ -1,4 +1,4 @@
-import { getDictOptions, getDictsApi } from "@/api/admin/sys/sys-dictdata";
+import { getDictOptions } from "@/api/admin/sys/sys-dicttype";
 import { delFilemgrAppApi, exportFilemgrAppApi, FilemgrAppModel, getFilemgrAppPageApi } from "@/api/plugins/filemgr/filemgr-app";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
@@ -161,37 +161,10 @@ const FilemgrApp: React.FC = () => {
     }
   ];
   useEffect(() => {
-    const initData = async () => {
-      const { data: platformData, msg: platformMsg, code: platformCode } = await getDictsApi("plugin_filemgr_app_platform");
-      if (platformCode !== ResultEnum.SUCCESS) {
-        message.error(platformMsg);
-        return;
-      }
-      setPlatformOptions(getDictOptions(platformData));
-      const { data: appTypeData, msg: appTypeMsg, code: appTypeCode } = await getDictsApi("plugin_filemgr_app_type");
-      if (appTypeCode !== ResultEnum.SUCCESS) {
-        message.error(appTypeMsg);
-        return;
-      }
-      setAppTypeOptions(getDictOptions(appTypeData));
-      const {
-        data: downloadTypeData,
-        msg: downloadTypeMsg,
-        code: downloadTypeCode
-      } = await getDictsApi("plugin_filemgr_app_download_type");
-      if (downloadTypeCode !== ResultEnum.SUCCESS) {
-        message.error(downloadTypeMsg);
-        return;
-      }
-      setDownloadTypeOptions(getDictOptions(downloadTypeData));
-      const { data: statusData, msg: statusMsg, code: statusCode } = await getDictsApi("plugin_filemgr_publish_status");
-      if (statusCode !== ResultEnum.SUCCESS) {
-        message.error(statusMsg);
-        return;
-      }
-      setStatusOptions(getDictOptions(statusData));
-    };
-    initData();
+    setPlatformOptions(getDictOptions("plugin_filemgr_app_platform"));
+    setAppTypeOptions(getDictOptions("plugin_filemgr_app_type"));
+    setDownloadTypeOptions(getDictOptions("plugin_filemgr_app_download_type"));
+    setStatusOptions(getDictOptions("plugin_filemgr_publish_status"));
   }, []);
 
   const handleShowAddFormModal = (done: () => void) => {
