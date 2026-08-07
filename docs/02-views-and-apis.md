@@ -81,6 +81,15 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | `content/content-announcement/index.tsx` | 公告管理（CRUD + 导出） |
 | `filemgr/filemgr-app/index.tsx` | App 文件/安装包管理（CRUD + 上传 + 导出） |
 
+### 2.4 小说平台 `views/app/novel/`（2026-08-07 新增）
+
+| 页面 | 说明 |
+| --- | --- |
+| `novel-notice/index.tsx` + `components/FormModal.tsx` | 系统公告管理：分页（标题关键字搜索）、发布公告弹窗（标题≤100、内容≤2000 TextArea）、行删除（级联删除读者端通知） |
+| `novel-feedback/index.tsx` | 反馈/投诉管理：分页（类型 A~H、类别 feedback/complaint、内容关键字、时间范围筛选）、行删除 |
+| `novel-user/index.tsx` + `components/BanPostModal.tsx` | 读者管理：分页（用户名/昵称关键字、账户状态筛选）；账户状态开关（`app:novel-user:status`，禁用后该用户 token 立即失效）；禁言状态列（截止时间 + 原因 Tooltip）；禁止发帖/解除禁言弹窗（`app:novel-user:ban-post`，DatePicker 选截止时间，不选提交即解除） |
+| `novel-post/index.tsx` | 帖子管理：分页（标题关键字、状态筛选），展示字数/点赞/评论/收藏；操作列禁止访问/恢复（`app:novel-post:status`，二次确认，禁止后读者端不再展示） |
+
 > 每个页面同目录下一般有 `components/`（FormModal、选择弹窗等），命名与页面一一对应。
 
 ## 3. API 模块清单（`src/api/`）
@@ -171,6 +180,38 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 - **content/content-article**（base `/plugins/content/content-article`）：标准 CRUD。
 - **content/content-announcement**（base `/plugins/content/content-announcement`）：标准 CRUD。
 - **filemgr/filemgr-app**（base `/plugins/filemgr/filemgr-app`）：标准 CRUD；另有 `exportUploadFileAppApi` POST `/upload`（multipart，适配 rc-upload）。
+
+### 3.4 小说平台 `api/app/novel/`（2026-08-07 新增）
+
+- **novel-notice**（base `/app/novel/notice`）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelNoticePageApi` | GET `/` | 公告分页，query `keyword`（标题包含搜索） |
+| `addNovelNoticeApi` | POST `/` | 发布公告，body `{title≤100, content≤2000}`，广播到全部读者 |
+| `delNovelNoticeApi` | DELETE `/`（{ids}） | 删除公告，级联删除读者端通知 |
+
+- **novel-feedback**（base `/app/novel/feedback`）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelFeedbackPageApi` | GET `/` | 反馈/投诉分页，query `kind=feedback\|complaint`、`type=A~H`、`keyword`（内容包含搜索） |
+| `delNovelFeedbackApi` | DELETE `/`（{ids}） | 删除反馈/投诉 |
+
+- **novel-user**（base `/app/novel/user`）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelUserPageApi` | GET `/` | 读者分页（left join app_user），query `keyword`（用户名/昵称包含搜索）、`status`（1-正常 2-禁用） |
+| `changeNovelUserStatusApi` | PUT `/{id}/status` | 启用/禁用账户，body `{status: "1"\|"2"}`；禁用后 jwtauth 实时拒绝该读者请求 |
+| `banNovelUserPostApi` | PUT `/{id}/ban-post` | 禁止发帖，body `{banUntil: RFC3339 或 null, reason≤255}`；banUntil 为空则解除禁言 |
+
+- **novel-post**（base `/app/novel/post`）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelPostPageApi` | GET `/` | 帖子分页（全部状态），query `keyword`（标题包含搜索）、`status`（1-正常 2-禁止访问） |
+| `changeNovelPostStatusApi` | PUT `/{id}/status` | 禁止访问/恢复，body `{status: "1"\|"2"}`；禁止后读者端列表与详情均不可见 |
 
 ## 4. 核心领域类型（在对应 api 文件中定义）
 
