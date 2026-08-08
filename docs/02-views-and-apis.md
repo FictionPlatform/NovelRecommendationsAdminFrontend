@@ -88,7 +88,7 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | `novel-notice/index.tsx` + `components/FormModal.tsx` | 系统公告管理：分页（标题关键字搜索）、发布公告弹窗（标题≤100、内容≤2000 TextArea）、行删除（级联删除读者端通知） |
 | `novel-feedback/index.tsx` | 反馈/投诉管理：分页（类型 A~H、类别 feedback/complaint、内容关键字、时间范围筛选）、行删除 |
 | `novel-user/index.tsx` + `components/BanPostModal.tsx` | 读者管理：分页（用户名/昵称关键字、账户状态筛选）；账户状态开关（`app:novel-user:status`，禁用后该用户 token 立即失效）；禁言状态列（截止时间 + 原因 Tooltip）；禁止发帖/解除禁言弹窗（`app:novel-user:ban-post`，DatePicker 选截止时间，不选提交即解除） |
-| `novel-post/index.tsx` | 帖子管理：分页（标题关键字、状态筛选），展示字数/点赞/评论/收藏；操作列禁止访问/恢复（`app:novel-post:status`，二次确认，禁止后读者端不再展示） |
+| `novel-post/index.tsx` | 话题管理：分页（标题关键字、状态筛选），展示字数/点赞/评论/收藏；操作列禁止访问/恢复（`app:novel-post:status`，二次确认，禁止后读者端不再展示） |
 
 > 每个页面同目录下一般有 `components/`（FormModal、选择弹窗等），命名与页面一一对应。
 
@@ -210,7 +210,7 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 
 | 函数 | 路径/方法 | 说明 |
 | --- | --- | --- |
-| `getNovelPostPageApi` | GET `/` | 帖子分页（全部状态），query `keyword`（标题包含搜索）、`status`（1-正常 2-禁止访问） |
+| `getNovelPostPageApi` | GET `/` | 话题分页（全部状态），query `keyword`（标题包含搜索）、`status`（1-正常 2-禁止访问） |
 | `changeNovelPostStatusApi` | PUT `/{id}/status` | 禁止访问/恢复，body `{status: "1"\|"2"}`；禁止后读者端列表与详情均不可见 |
 
 ## 4. 核心领域类型（在对应 api 文件中定义）

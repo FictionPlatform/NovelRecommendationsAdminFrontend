@@ -32,7 +32,7 @@ const NovelPost: React.FC = () => {
       }
     },
     {
-      title: "帖子编号",
+      title: "话题编号",
       dataIndex: "id",
       hideInSearch: true,
       width: 80,
@@ -156,8 +156,8 @@ const NovelPost: React.FC = () => {
       icon: <ExclamationCircleOutlined />,
       content:
         record.status === "1"
-          ? `是否确认禁止访问帖子「${record.title}」？禁止后读者端将不再展示该帖。`
-          : `是否确认恢复帖子「${record.title}」的访问？恢复后读者端将重新展示该帖。`,
+          ? `是否确认禁止访问话题「${record.title}」？禁止后读者端将不再展示该帖。`
+          : `是否确认恢复话题「${record.title}」的访问？恢复后读者端将重新展示该帖。`,
       okText: "确认",
       cancelText: "取消",
       maskClosable: true,
@@ -208,7 +208,7 @@ const NovelPost: React.FC = () => {
         search={{ labelWidth: "auto", showHiddenNum: true }}
         pagination={pagination}
         dateFormatter="string"
-        headerTitle="帖子管理"
+        headerTitle="话题管理"
       />
     </>
   );

@@ -21,6 +21,9 @@ const LoginForm = (props: any) => {
 	const [captchaInfo, setCaptchaInfo] = useState("");
 	const [captchaId, setCaptchaId] = useState("");
 	const navigate = useNavigate();
+	// 开发环境给验证码设置默认值，免手动输入
+	const isDev = import.meta.env.MODE === "development";
+	const defaultCode = isDev ? "1234" : undefined;
 
 	const onCaptcha = async () => {
 		const { data, msg, code } = await getCaptchaApi();
@@ -108,7 +111,7 @@ const LoginForm = (props: any) => {
 
 	return (
 		<div className="login-form-content">
-			<Form form={form} name="basic" initialValues={{ username: "admin", password: "123456" }} size="large" autoComplete="off">
+			<Form form={form} name="basic" initialValues={{ username: "admin", password: "123456", code: defaultCode }} size="large" autoComplete="off">
 				<Form.Item name="username" rules={[{ required: true, message: "请输入用户名!" }]}>
 					<Input prefix={<UserOutlined />} placeholder="用户名: admin / test" />
 				</Form.Item>
