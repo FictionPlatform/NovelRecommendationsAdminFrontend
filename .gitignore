@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 stats.html
-
+package-lock.json
 
 # Editor directories and files
 .vscode/*
@@ -25,3 +25,4 @@ stats.html
 *.njsproj
 *.sln
 *.sw?
+
