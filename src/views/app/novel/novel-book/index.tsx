@@ -1,19 +1,23 @@
-import { getNovelBookPageApi, NovelBookModel } from "@/api/app/novel/novel-book";
+import { getNovelBookPageApi, NovelBookModel, updateNovelBookApi } from "@/api/app/novel/novel-book";
 import HocAuth from "@/components/HocAuth";
 import LoadingButton from "@/components/LoadingButton";
 import { pagination } from "@/config/proTable";
+import { ResultEnum } from "@/enums/httpEnum";
+import { message } from "@/hooks/useMessage";
 import { formatDataForProTable } from "@/utils";
-import { MergeOutlined } from "@ant-design/icons";
+import { EditOutlined, MergeOutlined, UpCircleOutlined, DownCircleOutlined } from "@ant-design/icons";
 import type { ActionType, ProColumns, ProFormInstance } from "@ant-design/pro-components";
 import { ProTable } from "@ant-design/pro-components";
 import { Space, Tag, Image, Tooltip } from "antd";
 import React, { useRef } from "react";
 import MergeModal, { MergeModalRef } from "./components/MergeModal";
+import EditModal, { EditModalRef } from "./components/EditModal";
 
 const NovelBook: React.FC = () => {
   const actionRef = React.useRef<ActionType>();
   const tableFormRef = React.useRef<ProFormInstance>();
   const mergeModalRef = useRef<MergeModalRef>(null);
+  const editModalRef = useRef<EditModalRef>(null);
 
   const columns: ProColumns<NovelBookModel>[] = [
     {
@@ -113,6 +117,28 @@ const NovelBook: React.FC = () => {
       width: 110,
       render: (_, data) => (
         <Space>
+          <HocAuth permission={["app:novel-book:edit"]}>
+            <LoadingButton
+              key="edit"
+              type="link"
+              size="small"
+              icon={<EditOutlined />}
+              onClick={done => handleShowEditModal(data, done)}
+            >
+              编辑
+            </LoadingButton>
+          </HocAuth>
+          <HocAuth permission={["app:novel-book:edit"]}>
+            <LoadingButton
+              key="toggle-status"
+              type="link"
+              size="small"
+              icon={data.status === "1" ? <DownCircleOutlined /> : <UpCircleOutlined />}
+              onClick={done => handleToggleStatus(data, done)}
+            >
+              {data.status === "1" ? "下架" : "上架"}
+            </LoadingButton>
+          </HocAuth>
           <HocAuth permission={["app:novel-book:merge"]}>
             <LoadingButton
               key="merge"
@@ -135,7 +161,31 @@ const NovelBook: React.FC = () => {
     setTimeout(() => done(), 1000);
   };
 
+  const handleShowEditModal = (data: NovelBookModel, done: () => void) => {
+    editModalRef.current?.showEditModal(data);
+    setTimeout(() => done(), 1000);
+  };
+
+  const handleToggleStatus = async (data: NovelBookModel, done: () => void) => {
+    try {
+      const nextStatus = data.status === "1" ? "2" : "1";
+      const { msg, code } = await updateNovelBookApi(data.id!, { status: nextStatus });
+      if (code !== ResultEnum.SUCCESS) {
+        message.error(msg);
+        return;
+      }
+      message.success(msg);
+      actionRef.current?.reload(false);
+    } finally {
+      done();
+    }
+  };
+
   const handleMergeModalConfirm = () => {
+    actionRef.current?.reload(false);
+  };
+
+  const handleEditModalConfirm = () => {
     actionRef.current?.reload(false);
   };
 
@@ -177,6 +227,7 @@ const NovelBook: React.FC = () => {
         toolBarRender={toolBarRender}
       />
       <MergeModal ref={mergeModalRef} onConfirm={handleMergeModalConfirm} />
+      <EditModal ref={editModalRef} onConfirm={handleEditModalConfirm} />
     </>
   );
 };

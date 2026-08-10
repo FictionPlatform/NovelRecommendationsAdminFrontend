@@ -2,7 +2,7 @@ import { addNovelNoticeApi } from "@/api/app/novel/novel-notice";
 import LoadingButton from "@/components/LoadingButton";
 import { ResultEnum } from "@/enums/httpEnum";
 import { message } from "@/hooks/useMessage";
-import { Form, Input, Modal } from "antd";
+import { Form, Input, InputNumber, Modal } from "antd";
 import { forwardRef, useImperativeHandle, useState } from "react";
 
 export interface FormModalRef {
@@ -102,6 +102,15 @@ const FormModal = forwardRef<FormModalRef, ModalProps>(({ onConfirm }, ref) => {
           ]}
         >
           <Input.TextArea placeholder="请输入公告内容" showCount maxLength={2000} rows={6} />
+        </Form.Item>
+        <Form.Item
+          name="validDays"
+          label="有效天数"
+          initialValue={0}
+          extra="公告发布后，登录用户在有效期内才会收取；过期后不再收取。0 表示永久有效。"
+          rules={[{ required: true, message: "请输入有效天数" }]}
+        >
+          <InputNumber min={0} max={3650} style={{ width: "100%" }} placeholder="0 表示永久有效" />
         </Form.Item>
       </Form>
     </Modal>

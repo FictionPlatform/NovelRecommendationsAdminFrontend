@@ -12,9 +12,14 @@ export interface NovelBookModel {
   category?: string;
   categoryName?: string;
   tags?: string[];
+  slogan?: string;
+  description?: string;
   clicks?: number;
   wordCount?: number;
   chapters?: number;
+  publishDate?: string;
+  readUrl?: string;
+  isFeatured?: number;
   status?: string;
   createdAt?: Date;
 }
@@ -36,4 +41,12 @@ export const getNovelBookPageApi = (params: NovelBookQuery) => {
 
 export const mergeNovelBookApi = (data: { sourceBookId: number; targetBookId: number }) => {
   return request.post<object>(`/admin-api/v1/app/novel/book/merge`, data);
+};
+
+export const updateNovelBookApi = (id: number, data: object) => {
+  return request.put<object>(`/admin-api/v1/app/novel/book/${id}`, data);
+};
+
+export const deleteNovelBookApi = (ids: number[]) => {
+  return request.delete<object>(`/admin-api/v1/app/novel/book`, { ids });
 };
