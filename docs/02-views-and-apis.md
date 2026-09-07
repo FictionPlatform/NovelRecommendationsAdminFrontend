@@ -81,7 +81,7 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | `content/content-announcement/index.tsx` | 公告管理（CRUD + 导出） |
 | `filemgr/filemgr-app/index.tsx` | App 文件/安装包管理（CRUD + 上传 + 导出） |
 
-### 2.4 小说平台 `views/app/novel/`（2026-08-07 新增）
+### 2.4 小说平台 `views/app/novel/`（2026-08-07 新增，2026-08-09 扩展为 7 个页面）
 
 | 页面 | 说明 |
 | --- | --- |
@@ -89,6 +89,9 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | `novel-feedback/index.tsx` | 反馈/投诉管理：分页（类型 A~H、类别 feedback/complaint、内容关键字、时间范围筛选）、行删除 |
 | `novel-user/index.tsx` + `components/BanPostModal.tsx` | 读者管理：分页（用户名/昵称关键字、账户状态筛选）；账户状态开关（`app:novel-user:status`，禁用后该用户 token 立即失效）；禁言状态列（截止时间 + 原因 Tooltip）；禁止发帖/解除禁言弹窗（`app:novel-user:ban-post`，DatePicker 选截止时间，不选提交即解除） |
 | `novel-post/index.tsx` | 话题管理：分页（标题关键字、状态筛选），展示字数/点赞/评论/收藏；操作列禁止访问/恢复（`app:novel-post:status`，二次确认，禁止后读者端不再展示） |
+| `novel-category/index.tsx` + `components/FormModal.tsx` | 分类管理：分页（名称/状态筛选），展示标签数、排序、状态；新增/编辑弹窗（名称≤32、排序、状态） |
+| `novel-tag/index.tsx` + `components/FormModal.tsx` | 标签管理：分页（按分类筛选），展示所属分类、排序、状态；新增/编辑弹窗（分类下拉 + 名称≤32，分类内重名校验） |
+| `novel-book/index.tsx` + `components/EditModal.tsx` + `components/MergeModal.tsx` | 书籍管理：分页（含下架书 `allStatus`，关键字/分类/状态筛选）；编辑弹窗（全字段）、快捷上架/下架（`app:novel-book:edit`）、合并弹窗（源书信息 + 目标书搜索选择 + 二次确认，`app:novel-book:merge`） |
 
 > 每个页面同目录下一般有 `components/`（FormModal、选择弹窗等），命名与页面一一对应。
 
@@ -212,6 +215,33 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | --- | --- | --- |
 | `getNovelPostPageApi` | GET `/` | 话题分页（全部状态），query `keyword`（标题包含搜索）、`status`（1-正常 2-禁止访问） |
 | `changeNovelPostStatusApi` | PUT `/{id}/status` | 禁止访问/恢复，body `{status: "1"\|"2"}`；禁止后读者端列表与详情均不可见 |
+
+- **novel-category**（base `/app/novel/category`，2026-08-09 新增）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelCategoryPageApi` | GET `/` | 分类分页，query `name`（名称包含搜索）、`status`；列表含 `tagCount` 标签数 |
+| `addNovelCategoryApi` | POST `/` | 新增分类，body `{name≤32, sort, status}`；重名校验 |
+| `updateNovelCategoryApi` | PUT `/{id}` | 修改分类，body 同上 |
+| `delNovelCategoryApi` | DELETE `/`（{ids}） | 删除分类；该分类下存在标签/书籍时禁止删除 |
+
+- **novel-tag**（base `/app/novel/tag`，2026-08-09 新增）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelTagPageApi` | GET `/` | 标签分页，query `categoryId`（按分类筛选）、`name`、`status`；列表含 `category` 分类名 |
+| `addNovelTagApi` | POST `/` | 新增标签，body `{categoryId, name≤32, sort, status}`；分类内重名校验 |
+| `updateNovelTagApi` | PUT `/{id}` | 修改标签，body 同上 |
+| `delNovelTagApi` | DELETE `/`（{ids}） | 删除标签 |
+
+- **novel-book**（base `/app/novel/book`，2026-08-09 新增）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelBookPageApi` | GET `/` | 书籍分页（强制 `allStatus=true` 含下架书），query `keyword`（书名/作者/标签）、`category`、`status`、`serialStatus` |
+| `updateNovelBookApi` | PUT `/{id}` | 编辑书籍（全字段：书名/作者/分类/标签/简介/封面/字数/章节/连载/上架/精选等）；复用于快捷上架/下架 |
+| `mergeNovelBookApi` | POST `/merge` | 合并书籍，body `{sourceBookId, targetBookId}`（源书→目标书迁移书评/收藏/话题引用并聚合，源书下架） |
+| `deleteNovelBookApi` | DELETE `/`（{ids}） | 删除书籍（API 已定义；页面操作列当前未挂删除按钮） |
 
 ## 4. 核心领域类型（在对应 api 文件中定义）
 

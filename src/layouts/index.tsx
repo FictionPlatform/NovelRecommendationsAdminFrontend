@@ -47,7 +47,7 @@ const LayoutIndex = (props: any) => {
 			<Layout>
 				<LayoutHeader></LayoutHeader>
 				<LayoutTabs></LayoutTabs>
-				<KeepAlive name={pathname} when={false}>
+				<KeepAlive name={pathname} when={keepAlive}>
 					<Content>
 						<Outlet></Outlet>
 					</Content>
