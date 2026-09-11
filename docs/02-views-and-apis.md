@@ -81,7 +81,7 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | `content/content-announcement/index.tsx` | 公告管理（CRUD + 导出） |
 | `filemgr/filemgr-app/index.tsx` | App 文件/安装包管理（CRUD + 上传 + 导出） |
 
-### 2.4 小说平台 `views/app/novel/`（2026-08-07 新增，2026-08-09 扩展为 7 个页面）
+### 2.4 小说平台 `views/app/novel/`（2026-08-07 新增，2026-08-09 扩展为 8 个页面）
 
 | 页面 | 说明 |
 | --- | --- |
@@ -92,6 +92,7 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | `novel-category/index.tsx` + `components/FormModal.tsx` | 分类管理：分页（名称/状态筛选），展示标签数、排序、状态；新增/编辑弹窗（名称≤32、排序、状态） |
 | `novel-tag/index.tsx` + `components/FormModal.tsx` | 标签管理：分页（按分类筛选），展示所属分类、排序、状态；新增/编辑弹窗（分类下拉 + 名称≤32，分类内重名校验） |
 | `novel-book/index.tsx` + `components/EditModal.tsx` + `components/MergeModal.tsx` | 书籍管理：分页（含下架书 `allStatus`，关键字/分类/状态筛选）；编辑弹窗（全字段）、快捷上架/下架（`app:novel-book:edit`）、合并弹窗（源书信息 + 目标书搜索选择 + 二次确认，`app:novel-book:merge`） |
+| `novel-notification/index.tsx` + `components/SendModal.tsx` | 通知管理：分页（标题/内容关键字、来源筛选），展示收件用户/ID/内容/来源标签/已读状态；发送通知弹窗（全部读者或指定读者 ID + 标题≤100 + 内容≤2000）；行删除。权限 `app:novel-notification:query/add/del` |
 
 > 每个页面同目录下一般有 `components/`（FormModal、选择弹窗等），命名与页面一一对应。
 
@@ -242,6 +243,14 @@ interface ResPage<T> { list: T[]; count: number; extend: T; pageIndex: number; p
 | `updateNovelBookApi` | PUT `/{id}` | 编辑书籍（全字段：书名/作者/分类/标签/简介/封面/字数/章节/连载/上架/精选等）；复用于快捷上架/下架 |
 | `mergeNovelBookApi` | POST `/merge` | 合并书籍，body `{sourceBookId, targetBookId}`（源书→目标书迁移书评/收藏/话题引用并聚合，源书下架） |
 | `deleteNovelBookApi` | DELETE `/`（{ids}） | 删除书籍（API 已定义；页面操作列当前未挂删除按钮） |
+
+- **novel-notification**（base `/app/novel/notification`，2026-08-10 新增）：
+
+| 函数 | 路径/方法 | 说明 |
+| --- | --- | --- |
+| `getNovelNotificationPageApi` | GET `/` | 通知分页（全量读者通知），query `keyword`（标题/内容包含搜索）、`source`（system/notice/admin/feedback/complaint）；列表含 `userName` 收件人昵称、`createdAtStr` |
+| `sendNovelNotificationApi` | POST `/` | 发送通知，body `{userId, title≤100, content≤2000}`；userId>0 发给指定读者，userId=0 发给全部正常读者（source=admin，全员分批 500/批） |
+| `delNovelNotificationApi` | DELETE `/`（{ids}） | 删除通知 |
 
 ## 4. 核心领域类型（在对应 api 文件中定义）
 
